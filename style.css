@@ -1,7 +1,57 @@
 body {
-    height : 100
+    background-color: #111111;
+  }
+#particles-js{
+    width: 100%;
+    height: 100%;
+    background: #111111;
 }
 .chess-line>div{
     width: 50px;
     height: 50px;
+    font-size: 40px;
+    
+}
+
+.blur-radius-box-shadow {
+    box-shadow: 5px 5px 20px #fff;
+}
+.game-box {
+    width: 400px;
+    text-align: center;
+    margin:  auto;
+    margin-bottom: 30px;
+    vertical-align: middle;
+}
+.bg-cold{
+    filter: alpha(opacity=90);
+    opacity: 0.9;
+}
+.bg-cold-2x{
+    filter: alpha(opacity=40);
+    opacity: 0.4;
+}
+.bg-dark{
+    background-color: #fff;   
+}
+.white{
+    color: #aa73ff;
+    cursor: pointer;
+        
+}
+.black{
+    color:  #f8c210  ;
+    cursor: pointer; 
+}
+
+.bg-to-play{
+    background-color: rgba(0, 2, 2, 0.1);
+    cursor: pointer; 
+}
+.bg-to-play:hover{
+    border-radius: 125%;        
+    background: white;
+    display:inline-block;
+    opacity: 0.6;
+    transform: scale(0.5);
 }
