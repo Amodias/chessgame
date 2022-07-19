@@ -16,12 +16,14 @@ body {
 .blur-radius-box-shadow {
     box-shadow: 5px 5px 20px #fff;
 }
+
 .game-box {
     width: 400px;
     text-align: center;
     margin:  auto;
     margin-bottom: 30px;
     vertical-align: middle;
+    
 }
 .bg-cold{
     filter: alpha(opacity=90);
@@ -37,21 +39,57 @@ body {
 .white{
     color: #aa73ff;
     cursor: pointer;
-        
+    filter: alpha(opacity=90);
+    opacity: 0.9;    
 }
 .black{
     color:  #f8c210  ;
-    cursor: pointer; 
+    cursor: pointer;
+    filter: alpha(opacity=90);
+    opacity: 0.9; 
 }
 
-.bg-to-play{
+.kill-effect ,.bg-to-play{
     background-color: rgba(0, 2, 2, 0.1);
     cursor: pointer; 
 }
 .bg-to-play:hover{
     border-radius: 125%;        
     background: white;
+    /* background-image: url("skull.jpg");
+    height: 50px; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover; */
     display:inline-block;
     opacity: 0.6;
     transform: scale(0.5);
+}
+.kill-effect:hover{
+    border-radius: 125%;        
+    background: white;
+    background-image: url("skull.jpg");
+    height: 50px; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+    display:inline-block;
+    opacity: 0.6;
+    transform: scale(0.5);
+
+}
+.modal, .modal-backdrop {
+    background-color: rgba(0, 2, 2, 0.1);
+    position: absolute !important;
+}
+
+.btn-select-side:hover{
+    transform: scale(1.1);
+    background-color: #111111;
+}
+.btn-select-side{
+    box-shadow: 5px 5px 20px #111111;
+}
+.font-customed{
+    font-family: system-ui;
 }

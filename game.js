@@ -1,87 +1,79 @@
-$(function() {    
-
-    for (let i = 0; i < 8 ; i++) {
-        list = [];
-        for (let y = 0; y < 8 ; y++) {
-            var id = ("#"+i+"_"+y);
-            $(id).addClass('bg-cold');
-            var odd = ((i+y)%2);
-            if(odd == 0){
-                $(id).addClass('bg-dark dark-box');
-            }else{
-                $(id).addClass('bg-light light-box');
-            }
-        list.push(id);
-        } 
-      }
-
-    function axis_to_id( arr ) {
-        list = [];
-        for (const  i of  arr['x'] ){
-            for (const y of arr['y']){
-                id =  ('#'+ i +"_" + y);
-                list.push(id);
-            }
+function axis_to_id( arr ) {
+   var list = [];
+    for (const  i of  arr['x'] ){
+        for (const y of arr['y']){
+            var id =  ('#'+ i +"_" + y);
+            list.push(id);
         }
-        return list;    
     }
-    
-    $('.black , .white').on('click', function(){
+    return list;    
+}
 
-        var restore_element = $('.chess-line div');
-        if(restore_element.hasClass("bg-to-play")){
-            restore_element.each(function( ) {
-            if($(this).hasClass("dark-box")){
-                $(this).removeClass('bg-to-play');
-                $(this).addClass('bg-dark');
-            }
-            if($(this).hasClass("light-box")){
-                $(this).removeClass('bg-to-play');
-                $(this).addClass('bg-light');
-            }
-            });
+
+export function get_possible_play_id(chess_pawn , chess_side ,axisx ,axisy ){
+    if(chess_pawn == "pawn"){
+
+        var possible_move_axis = [];
+        var possible_eat_axis = [] ;
+        var possible_play_id = [];
+        var possible_move_id = [];
+        
+        // Checker s'il peut manger : 
+        possible_eat_axis['y']=[parseInt(axisy) - parseInt(1) , parseInt(axisy) + parseInt(1)];
+        if(chess_side == "w"){
+            possible_eat_axis['x']=[parseInt(axisx) - parseInt(1)];        
         }
-
-        var selected_id =  this.id;
-        var selected_class = this.className;
-        chess_element = [];
-        var element =  selected_id.split('_');
-        chess_element['pawn'] = element[0];
-        chess_element['position'] = element[1];
-        var parent_id = $(this).parent().attr('id');
-        parent_id = parent_id.split('_');
-        axis  = [];
-        axis['x'] = parent_id[0];
-        axis['y'] = parent_id[1];
-        if(selected_class == "white"){
-            if(chess_element['pawn'] == "pawn"){
-                possible_play_axis = [];
-                possible_play_axis['y'] = axis['y']; 
-                possible_play_axis['x'] = [axis['x'] - 1 , axis['x'] - 2];
-                possible_play_id = [];
-                possible_play_id = axis_to_id(possible_play_axis);
-                for ( const yx of possible_play_id){
-                    if($(yx).hasClass("dark-box")){
-                        $(yx).toggleClass("bg-dark bg-to-play");
-                    }else{
-                        $(yx).toggleClass("bg-light bg-to-play");
-                    }
+        if(chess_side == "b"){
+            possible_eat_axis['x']=[parseInt(axisx) + parseInt(1)];        
+        }    
+        var possible_eat_id =  axis_to_id(possible_eat_axis);
+        for ( const yexe of possible_eat_id){
+            if( $(yexe).children().length != 0 ){
+                var id_pawn_to_eat = $(yexe).children(":first").attr('id');
+                var element_pte =  id_pawn_to_eat.split('_');
+                var side = element_pte[1];
+                if(side != chess_side){
+                    possible_play_id.push(yexe);
+                    // bool_kill = true ;
                 }
-            }
+            }    
         }
-       
-        // else if selected black !!! Do not forget
-       
-        $('.bg-to-play').on('click',function(){
-            $("#"+selected_id).hide().prependTo("#"+this.id).fadeIn();
-            for ( const yx of possible_play_id){
-                if($(yx).hasClass("dark-box")){
-                    $(yx).toggleClass("bg-dark bg-to-play");
+        
+        // mouvment simple du pwan : 
+        possible_move_axis['y'] = axisy; 
+        
+        if(chess_side == "w"){
+            possible_move_axis['x'] = [parseInt(axisx) - parseInt(1) , parseInt(axisx) - parseInt(2)];
+        }
+        if(chess_side == "b"){
+            possible_move_axis['x'] = [parseInt(axisx) + parseInt(1) , parseInt(axisx) + parseInt(2)];
+        }
+        
+        possible_move_id = axis_to_id(possible_move_axis);
+        // contrainte d'ecrasment & de depassment
+         
+        var move = true ;
+        possible_move_id.forEach((ymxm,index) => {
+            if(index==0 ){
+                if($(ymxm).children().length == 0){
+                    move = true ;
+                    possible_play_id.push(ymxm);
                 }else{
-                    $(yx).toggleClass("bg-light bg-to-play");
+                    move = false ;
                 }
+            }else{
+                if(move && $(ymxm).children().length == 0){
+                    possible_play_id.push(ymxm);
+                }
+            } 
+              });
             }
-        })
-    })
-});
+            else{
+                possible_play_id = [];
+            }
+            return possible_play_id ;
+};
 
+export function movepawn(){
+    
+}
