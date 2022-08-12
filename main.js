@@ -1,4 +1,4 @@
-import {get_possible_play_id} from './game' ;
+import {get_possible_play_id} from './game.js' ;
 function set_bg(){
     for (let i = 0; i < 8 ; i++) {
         for (let y = 0; y < 8 ; y++) {
@@ -51,7 +51,6 @@ $( document ).ready(function() {
     set_bg();
     show_tooltip();
     $('.chess_element').on('click', function(event){
-
         event.preventDefault();
         
         var bool_play_once = true;
@@ -68,17 +67,16 @@ $( document ).ready(function() {
             return ;
         }
         var parent_id = $this.parent().attr('id');
-        parent_id = parent_id.split('_');
-        var axis  = [];
-        axis['x'] = (parent_id[0]);
-        axis['y'] = (parent_id[1]);
         
-        var possible_play_id = get_possible_play_id(chess_element['pawn'],chess_element['side'],axis['x'],axis['y']);
-        console.log(possible_play_id);
+        var p_id = parent_id.split('_');
+        var axis  = [];
+        axis['x'] = (p_id[0]);
+        axis['y'] = (p_id[1]);
+        
+        var possible_play_id = get_possible_play_id(chess_element['pawn'],chess_element['side'],axis['x'],axis['y'],"#"+parent_id);
         if(possible_play_id.length > 0){
              bool_play_same_pawn = true;
         }
-        console.log(bool_play_same_pawn);
 
                 for ( const yx of possible_play_id){
                         if($(yx).hasClass("dark-box")){
@@ -106,7 +104,6 @@ $( document ).ready(function() {
                                 player_side = switch_player_side(player_side);
                             }
                             
-                            console.log(possible_play_id + " " + bool_play_same_pawn);
                         })
                     
                     }    
@@ -114,7 +111,6 @@ $( document ).ready(function() {
             }      
             bool_play_same_pawn = false;
             show_tooltip();
-            $('.chess_element').off('click');
     })
     
     $('#show_possible_play_id').on('click',function(){
