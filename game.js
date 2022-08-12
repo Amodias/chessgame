@@ -173,6 +173,62 @@ export function get_possible_play_id(chess_pawn , chess_side ,axisx ,axisy ,sele
         }
         
     }
+    // ♘
+    else if(chess_pawn == "knight"){
+        var possible_move_axis = [];
+        var possible_eat_axis = [] ;
+        var possible_play_id = [];
+        var possible_move_id = [];
+        
+       // mouvment simple du pwan :
+       possible_move_axis['x'] = [parseInt(axisx) + parseInt(1)];
+       possible_move_axis['y'] = [parseInt(axisy) + parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+       
+       possible_move_axis['x'] = [parseInt(axisx) - parseInt(1)];
+       possible_move_axis['y'] = [parseInt(axisy) - parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+
+       possible_move_axis['y'] = [parseInt(axisy) + parseInt(1)];
+       possible_move_axis['x'] = [parseInt(axisx) + parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+       
+       possible_move_axis['y'] = [parseInt(axisy) - parseInt(1)];
+       possible_move_axis['x'] = [parseInt(axisx) - parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+       
+       possible_move_axis['x'] = [parseInt(axisx) - parseInt(1)];
+       possible_move_axis['y'] = [parseInt(axisy) + parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+       
+       possible_move_axis['x'] = [parseInt(axisx) + parseInt(1)];
+       possible_move_axis['y'] = [parseInt(axisy) - parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+
+       possible_move_axis['y'] = [parseInt(axisy) - parseInt(1)];
+       possible_move_axis['x'] = [parseInt(axisx) + parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+       
+       possible_move_axis['y'] = [parseInt(axisy) + parseInt(1)];
+       possible_move_axis['x'] = [parseInt(axisx) - parseInt(2)];
+       possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+       
+        
+        possible_move_id.forEach((ymxm,index) => {
+            if( $(ymxm).children().length != 0 ){
+                var id_pawn_to_eat = $(ymxm).children(":first").attr('id');
+                var element_pte =  id_pawn_to_eat.split('_');
+                var side = element_pte[1];
+                if(side != chess_side){
+                    possible_play_id.push(ymxm);
+                }
+            }else{
+                possible_play_id.push(ymxm);
+
+            }    
+        });
+
+    }
     else{
         possible_play_id = [];
     }
