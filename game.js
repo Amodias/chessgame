@@ -229,6 +229,137 @@ export function get_possible_play_id(chess_pawn , chess_side ,axisx ,axisy ,sele
         });
 
     }
+    // ♗
+    else if(chess_pawn == "bishop"){
+        var possible_move_axis = [];
+        var possible_eat_axis = [] ;
+        var possible_play_id = [];
+        var possible_move_id = [];
+        var id_to_ommit = [];
+        var yexe;
+       // mouvment simple du pwan :
+        var arr = []    ;
+        let i = parseInt(axisx);
+        let y = parseInt(axisy);
+        while ( i > 0 &&  y > 0 ) {
+            possible_move_axis['x'] = [i - 1];
+            possible_move_axis['y'] = [y - 1]; 
+            possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+            i--;
+            y--;
+            yexe = axis_to_id(possible_move_axis);
+            yexe = yexe[0];
+            if( $(yexe).children().length != 0 ){
+                var id_pawn_to_eat = $(yexe).children(":first").attr('id');
+                var element_pte =  id_pawn_to_eat.split('_');
+                var side = element_pte[1];
+                if(chess_side == side){
+                    id_to_ommit.push(yexe);
+                }
+            }
+            if( $(yexe).children().length != 0 ) break;
+        }
+        i = parseInt(axisx);
+        y = parseInt(axisy);
+        while ( i < 8 &&  y > 0 ) {
+            possible_move_axis['x'] = [i + 1];
+            possible_move_axis['y'] = [y - 1]; 
+            possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+            i++;
+            y--;
+            yexe = axis_to_id(possible_move_axis);
+            yexe = yexe[0];
+            if( $(yexe).children().length != 0 ){
+                var id_pawn_to_eat = $(yexe).children(":first").attr('id');
+                var element_pte =  id_pawn_to_eat.split('_');
+                var side = element_pte[1];
+                if(chess_side == side){
+                    id_to_ommit.push(yexe);
+                }
+                
+            }
+            if( $(yexe).children().length != 0 ) break;
+            
+        } 
+        
+        i = parseInt(axisx);
+        y = parseInt(axisy);
+        while ( i > 0 &&  y < 8 ) {
+            possible_move_axis['x'] = [i - 1];
+            possible_move_axis['y'] = [y + 1]; 
+            possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+            i--;
+            y++;
+            yexe = axis_to_id(possible_move_axis);
+            yexe = yexe[0];
+            if( $(yexe).children().length != 0 ){
+                var id_pawn_to_eat = $(yexe).children(":first").attr('id');
+                var element_pte =  id_pawn_to_eat.split('_');
+                var side = element_pte[1];
+                if(chess_side == side){
+                    id_to_ommit.push(yexe);
+                }
+                
+            }
+            if( $(yexe).children().length != 0 ) break;
+
+        } 
+       i = parseInt(axisx);
+       y = parseInt(axisy);
+        while ( i < 8 &&  y < 8 ) {
+            possible_move_axis['x'] = [i + 1];
+            possible_move_axis['y'] = [y + 1]; 
+            possible_move_id = possible_move_id.concat(axis_to_id(possible_move_axis));
+            i++;
+            y++;
+            yexe = axis_to_id(possible_move_axis);
+            yexe = yexe[0];
+            if( $(yexe).children().length != 0 ){
+                var id_pawn_to_eat = $(yexe).children(":first").attr('id');
+                var element_pte =  id_pawn_to_eat.split('_');
+                var side = element_pte[1];
+                if(chess_side == side){
+                    id_to_ommit.push(yexe);
+                }
+                break;
+            }
+            if( $(yexe).children().length != 0 ) break;
+            
+        } 
+        
+        possible_play_id = possible_move_id;
+        
+        for (const ij of id_to_ommit){
+            possible_play_id = removeItemAll(possible_play_id,ij);
+        }
+    }
+    // ♕
+    else if(chess_pawn == "queen"){
+        possible_play_id = get_possible_play_id("rook" , chess_side ,axisx ,axisy ,selected_id);
+        possible_play_id = possible_play_id.concat(get_possible_play_id("bishop" , chess_side ,axisx ,axisy ,selected_id))
+    }
+    // ♔
+    else if(chess_pawn == "king"){
+        var possible_play_id = [];
+        var possible_move_id = [];
+        possible_move_id = [[parseInt(axisy) , parseInt(axisx)-1] , [parseInt(axisy)  , parseInt(axisx)+1] , [parseInt(axisy)-1, parseInt(axisx)-1] , [parseInt(axisy)-1,parseInt(axisx)+1]
+            , [parseInt(axisy)-1,parseInt(axisx)] ,[parseInt(axisy)+1,parseInt(axisx)] ,[parseInt(axisy)+1,parseInt(axisx)-1] ,[parseInt(axisy)+1,parseInt(axisx)+1] 
+        ]
+        for (const  lst of  possible_move_id ){
+            var yexe = "#"+lst[1]+"_"+lst[0] ;
+            if( $(yexe).children().length != 0 ){
+                var id_pawn_to_eat = $(yexe).children(":first").attr('id');
+                var element_pte =  id_pawn_to_eat.split('_');
+                var side = element_pte[1];
+                if(chess_side != side){
+                    possible_play_id.push(yexe);
+                }
+            }else{
+                possible_play_id.push(yexe);
+            }    
+        }
+        
+    }
     else{
         possible_play_id = [];
     }
