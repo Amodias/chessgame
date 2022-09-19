@@ -13,156 +13,116 @@
         <!-- partical js  -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.42.2/tsparticles.min.js" integrity="sha512-oN3n3UfYfrcJN5lMwd6mzFtcK/3B11nEk4gbWzBGmkxVPYJlxqFJUU3wHJMmDU/P/HjnRoe2dqebJwmzzaVGEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!--style.css-->
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <link rel="stylesheet" type="text/css" href="sass/style.scss">
+        <link rel="stylesheet"  type="text/css" href="/assets/style.css">
         <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
         <!-- Script JS for game -->
-        <script  type="module" src="main.js"></script>
-        <script  type="module" src="game.js" ></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script  type="module" src="/assets/main.js"></script>
+        <script  type="module" src="/assets/game.js" ></script>
+        <script type="module">
+          import {setCookie,getCookie,checkCookie,hey} from '/assets/main.js' ;
+          hey();
+          var socket = io();
+          socket.on("connect", () => {
+            console.log(socket.id); 
+          });
+          $( document ).ready(function() {
+            if(checkCookie()){
+              $(".register").hide();
+            }
+            $('#createcookie').on('click',function(){
+              if( $("#username").val().length === 0 ) {
+                $("#username").addClass('is-invalid');
+              }else{
+                let username = $("#username").val();
+                setCookie("username", username, 7);
+              }
+            })
+            // let username = $("#username").val();
+            let username = getCookie("username");
 
+            socket.emit('send-username', username);
+          })
+          
+       </script>
     </head>
-    <title>Chess Game | Ready to play</title>
+    <title>Chess Game ♔♕ </title>
     <body>
         <div id="particles-js" style="z-index:-10"></div>
-        <div class="container row mx-0 my-5 " style="z-index:10" >
-            <section class="col-8" id="Game">
-                <div class="game-box blur-radius-box-shadow">
-                    
-                    <div class="d-flex  justify-content-center  ">
-                        <div class="d-flex flex-row  chess-line ">
-                            <div id="0_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="rook_b_1"> ♖</div></div>
-                            <div id="0_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="knight_b_1"> ♘ </div></div>
-                            <div id="0_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="bishop_b_1"> ♗ </div></div>
-                            <div id="0_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="queen_b_1"> ♕ </div></div>
-                            <div id="0_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="king_b_1"> ♔ </div></div>
-                            <div id="0_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="bishop_b_2"> ♗ </div></div>
-                            <div id="0_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="knight_b_2"> ♘ </div></div>
-                            <div id="0_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="rook_b_2"> ♖ </div></div>
-                        </div>
-                    </div>
-                    <div class="d-flex  justify-content-center  ">
-                        <div class="d-flex flex-row chess-line  ">
-                            <div id="1_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_1"> ♙ </div></div>
-                            <div id="1_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_2"> ♙ </div></div>
-                            <div id="1_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_3"> ♙ </div></div>
-                            <div id="1_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_4"> ♙ </div></div>
-                            <div id="1_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_5"> ♙ </div></div>
-                            <div id="1_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_6"> ♙ </div></div>
-                            <div id="1_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_7"> ♙ </div></div>
-                            <div id="1_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="black chess_element" id="pawn_b_8"> ♙ </div></div>
-                        </div>
-                    </div>
-                    <div class="d-flex  justify-content-center  ">
-                        <div class="d-flex flex-row chess-line ">
-                            <div id="2_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="2_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="2_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="2_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="2_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="2_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="2_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="2_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                        </div>
-                    </div>
-                    <div class="d-flex  justify-content-center  ">
-                        <div class="d-flex flex-row chess-line ">
-                            <div id="3_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="3_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="3_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="3_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="3_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="3_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="3_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="3_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                        </div>
-                    </div>
-                    <div class="d-flex  justify-content-center  ">
-                        <div class="d-flex flex-row chess-line ">
-                            <div id="4_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="4_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="4_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="4_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="4_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="4_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="4_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="4_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                        </div>
-                    </div>
-                    <div class="d-flex  justify-content-center  ">
-                        <div class="d-flex flex-row chess-line ">
-                            <div id="5_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="5_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="5_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="5_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="5_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="5_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="5_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                            <div id="5_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""></div>
-                        </div>
-                    </div>
-                    <div class="d-flex  justify-content-center  ">
-                        <div class="d-flex flex-row chess-line ">
-                            <div id="6_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="pawn_w_1">♙ </div></div>
-                            <div id="6_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="pawn_w_2">♙ </div></div>
-                            <div id="6_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="pawn_w_3">♙ </div></div>
-                            <div id="6_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="pawn_w_4">♙ </div></div>
-                            <div id="6_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="pawn_w_5">♙ </div></div>
-                            <div id="6_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="pawn_w_6">♙ </div></div>
-                            <div id="6_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="pawn_w_7">♙ </div></div>
-                            <div id="6_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="white chess_element" id="pawn_w_8">♙ </div></div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-center  ">
-                        <div class="d-flex flex-row chess-line ">
-                            <div id="7_0" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="rook_w_1"> ♖ </div></div>
-                            <div id="7_1" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="knight_w_1"> ♘ </div></div>
-                            <div id="7_2" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="bishop_w_1"> ♗ </div></div>
-                            <div id="7_3" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="queen_w_1"> ♕ </div></div>
-                            <div id="7_4" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="king_w_1"> ♔ </div></div>
-                            <div id="7_5" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="bishop_w_2"> ♗ </div></div>
-                            <div id="7_6" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="knight_w_2"> ♘ </div></div>
-                            <div id="7_7" class=" d-flex align-items-center border justify-content-center" data-toggle="tooltip" data-placement="top" title=""><div class="chess_element white" id="rook_w_2"> ♖ </div></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="col-4 " id="List-available-player">
-                <ul class="list-group my-5  ">
-                    <li class="list-group-item font-customed bg-dark text-light text-center">List of available players <br> <button class="btn btn-success btn-sm my-1" id="restore_class"> restore</button> <button class="btn btn-primary btn-sm my-1" id="show_possible_play_id"> possible play id</button></li>
-                    <li class="list-group-item font-customed bg-cold-2x d-flex  justify-content-between align-items-center" >Wanda Mcnamara <i class="fa-solid fa-play"></i></li>
-                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Cordelia Davie <i class="fa-solid fa-play"></i></li>
-                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Adele Bartlett <i class="fa-solid fa-play"></i></li>
-                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Ivan Spencer  <i class="fa-solid fa-play"></i></li>
-                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Darren William <i class="fa-solid fa-play"></i></li>
-                  </ul>
-            </section>  
+        <div class="d-flex justify-content-center">
+          <div class="list-group">
+            <h2 class="text-center text-light my-4">Select Mode</h2>  
+            <a   data-toggle="modal" data-target="#multiplayermodal" class="my-3 text-light border rounded px-2 py-2 custom-a ">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Multi Player</h5>
+                <small><span class="badge badge-danger">  </span></small>
+              </div>
+              <p class="mb-1">Register to play with availabe player on Network</p>
+              <small>0 availabe player</small>
+            </a>
+            <a  href="SinglePlayer/index.html" class="my-3 text-light border rounded px-2 py-2 custom-a ">
+              <div class="d-flex w-100 justify-content-between ">
+                <h5 class="">Single Player</h5>
+                <small><span class="badge badge-success">  </span></small>
+              </div>
+              <p class="mb-1">Play with yourself</p>
+              <small class=" ">Mr.Robot S02EP07</small>
+            </a>
             
           </div>
-          
+        </div>
 
 
 
-
-          <div class="modal fade bd-example-modal-sm" id="select_side_model" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header d-flex justify-content-center">
-                  <h5 class="modal-title font-customed">select your side</h5>
-                  
+       <!-- Modal -->
+        <div class="modal fade" id="multiplayermodal" tabindex="-1" aria-labelledby="multiplayermodalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="multiplayermodalLabel">Search for players</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              
+              <div class="modal-body">
+                <div class="register">
+                  <div class="mx-5">
+                    <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                    <div class="input-group mb-2">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">@</div>
+                      </div>
+                      <input type="text" class="form-control" id="username" placeholder="Username">
+                    </div>
+                  </div>
+                  <div class="form-inline d-flex justify-content-center">
+                    <button id="createcookie"  class="btn btn-dark ">Submit</button>
+                      <div class="form-check mx-4">
+                        <input class="form-check-input" type="checkbox" id="autoSizingCheck">
+                        <label class="form-check-label" for="autoSizingCheck">
+                          Remember me
+                        </label>
+                      </div>
+                  </div>
                 </div>
-                <div class="modal-body row">
-                  <div class="col d-flex justify-content-center ">
-                    <button class="btn btn-select-side"><h2 id="w" class="white">♙</h2></button>
-                  </div>
-                  <div class="col d-flex justify-content-center ">
-                    <button class="btn btn-select-side"><h2 id="b" class="black">♙</h2></button>
-                  </div>
-                  </div>
-                </div>
-                
+                <div class="text-center loader my-2"></div> 
+                <ul class="list-group   d-none">
+                  <li class="list-group-item  text-center"> <h4>List of available players</h4></li>
+                  <li class="list-group-item  d-flex justify-content-between align-items-center" >Wanda Mcnamara <i class="fa-solid fa-play"></i></li>
+                  <li class="list-group-item  d-flex justify-content-between align-items-center">Cordelia Davie <i class="fa-solid fa-play"></i></li>
+                  <li class="list-group-item  d-flex justify-content-between align-items-center">Adele Bartlett <i class="fa-solid fa-play"></i></li>
+                  <li class="list-group-item  d-flex justify-content-between align-items-center">Ivan Spencer  <i class="fa-solid fa-play"></i></li>
+                  <li class="list-group-item  d-flex justify-content-between align-items-center">Darren William <i class="fa-solid fa-play"></i></li>
+                </ul>
+              </div>
+              <div class="modal-footer">
+
               </div>
             </div>
           </div>
+        </div>
+      
     </body>
 </html>
 
@@ -263,6 +223,23 @@ particlesJS("particles-js", {
     }
   },
   "retina_detect": true
+});
+$( document ).ready(function() {
+  $(".custom-a").on({
+    mouseenter: function () {
+      $(this).removeClass('text-light');
+      $(this).addClass('text-dark');
+      $(this).addClass('bg-light');
+        //stuff to do on mouse enter
+    },
+    mouseleave: function () {
+      $(this).addClass('text-light');
+      $(this).removeClass('text-dark');
+      $(this).removeClass('bg-light');
+    }
+   
+});
+
 });
 </script>
 

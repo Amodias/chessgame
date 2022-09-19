@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSS Bootstrap 4.3 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <!-- JS Bootstrap 4.3 -->
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+        <!-- Font awesome for icons -->
+        <script src="https://kit.fontawesome.com/15e6ce1be6.js" crossorigin="anonymous"></script>
+        <!-- partical js  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.42.2/tsparticles.min.js" integrity="sha512-oN3n3UfYfrcJN5lMwd6mzFtcK/3B11nEk4gbWzBGmkxVPYJlxqFJUU3wHJMmDU/P/HjnRoe2dqebJwmzzaVGEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!--style.css-->
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="sass/style.scss">
+        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <!-- Script JS for game -->
+        <script  type="module" src="main.js"></script>
+        <script  type="module" src="game.js" ></script>
+
+    </head>
+    <title>Chess Game | Ready to play</title>
+    <body>
+        <div id="particles-js" style="z-index:-10"></div>
+        <div class="container row mx-0 my-5 " style="z-index:10" >
+            <section  id="List-available-player">
+                <ul class="list-group my-5  ">
+                    <li class="list-group-item font-customed bg-dark text-light text-center">List of available players <br> <button class="btn btn-success btn-sm my-1" id="restore_class"> restore</button> <button class="btn btn-primary btn-sm my-1" id="show_possible_play_id"> possible play id</button></li>
+                    <li class="list-group-item font-customed bg-cold-2x d-flex  justify-content-between align-items-center" >Wanda Mcnamara <i class="fa-solid fa-play"></i></li>
+                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Cordelia Davie <i class="fa-solid fa-play"></i></li>
+                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Adele Bartlett <i class="fa-solid fa-play"></i></li>
+                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Ivan Spencer  <i class="fa-solid fa-play"></i></li>
+                    <li class="list-group-item font-customed bg-cold-2x d-flex justify-content-between align-items-center">Darren William <i class="fa-solid fa-play"></i></li>
+                  </ul>
+            </section>  
+            
+        </div>
+    </body>
+</html>
+
+<script>
+
+particlesJS("particles-js", {
+  "particles": {
+    "number": {
+      "value": 2500,
+      "density": {
+        "enable": true,
+        "value_area":9990
+      }
+    },
+    "color": {
+      "value": ["#aa73ff", "#f8c210", "#83d238", "#33b1f8"]
+    },
+    
+    "shape": {
+      "type": "circle",
+      "stroke": {
+        "width": 0,
+        "color": "#fff"
+      },
+      "polygon": {
+        "nb_sides": 5
+      },
+      "image": {
+        "src": "img/github.svg",
+        "width": 100,
+        "height": 100
+      }
+    },
+    "opacity": {
+      "value": 0.6,
+      "random": false,
+      "anim": {
+        "enable": false,
+        "speed": 1,
+        "opacity_min": 0.1,
+        "sync": false
+      }
+    },
+    "size": {
+      "value": 2,
+      "random": true,
+      "anim": {
+        "enable": false,
+        "speed": 40,
+        "size_min": 0.1,
+        "sync": false
+      }
+    },
+    "line_linked": {
+      "enable": true,
+      "distance": 120,
+      "color": "#ffffff",
+      "opacity": 0.4,
+      "width": 1
+    },
+  },
+  "interactivity": {
+    "detect_on": "window",
+    "events": {
+      "onhover": {
+        "enable": true,
+        "mode": "grab"
+      },
+      "onclick": {
+        "enable": false
+      },
+      "resize": true
+    },
+    "modes": {
+      "grab": {
+        "distance": 140,
+        "line_linked": {
+          "opacity": 1
+        }
+      },
+      "bubble": {
+        "distance": 400,
+        "size": 40,
+        "duration": 2,
+        "opacity": 8,
+        "speed": 3
+      },
+      "repulse": {
+        "distance": 200,
+        "duration": 0.4
+      },
+      "push": {
+        "particles_nb": 4
+      },
+      "remove": {
+        "particles_nb": 2
+      }
+    }
+  },
+  "retina_detect": true
+});
+</script>
+
