@@ -1,4 +1,41 @@
 import {get_possible_play_id} from './game.js' ;
+
+// Setting up cookies 
+
+export function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+  
+export function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+  
+export function checkCookie() {
+    let user = getCookie("username");
+    if (user != "") {
+      return true;
+    } else {
+    return false ;
+   }
+  } 
+export function hey(){
+    console.log('hey');
+}
+
 function set_bg(){
     for (let i = 0; i < 8 ; i++) {
         for (let y = 0; y < 8 ; y++) {
@@ -44,15 +81,12 @@ $( document ).ready(function() {
         $('.game-box').css('filter',' blur(0px)');
         $('#select_side_model').modal('hide');
          player_side = $(this).children(":first").attr('id');
-        
-
     })
     setTimeout(select_side, 500);
     set_bg();
     show_tooltip();
     $('.chess_element').on('click', function(event){
         event.preventDefault();
-        
         var bool_play_once = true;
         var bool_play_same_pawn = false ;
         set_bg();
@@ -67,17 +101,14 @@ $( document ).ready(function() {
             return ;
         }
         var parent_id = $this.parent().attr('id');
-        
         var p_id = parent_id.split('_');
         var axis  = [];
         axis['x'] = (p_id[0]);
         axis['y'] = (p_id[1]);
-        
         var possible_play_id = get_possible_play_id(chess_element['pawn'],chess_element['side'],axis['x'],axis['y'],"#"+parent_id);
         if(possible_play_id.length > 0){
              bool_play_same_pawn = true;
         }
-
                 for ( const yx of possible_play_id){
                         if($(yx).hasClass("dark-box")){
                             $(yx).removeClass('bg-dark');
@@ -91,7 +122,6 @@ $( document ).ready(function() {
                             $(yx).addClass('bg-to-play');
                         }
                     if(bool_play_same_pawn){
-
                         $(yx).on('click',function(event){
                             event.preventDefault();
                             if(bool_play_once){
@@ -102,12 +132,9 @@ $( document ).ready(function() {
                                 $(yx).off('click');
                                 bool_play_once = false ;
                                 player_side = switch_player_side(player_side);
-                            }
-                            
+                            }  
                         })
-                    
                     }    
-    
             }      
             bool_play_same_pawn = false;
             show_tooltip();
@@ -125,3 +152,4 @@ $( document ).ready(function() {
     });
 
 });
+

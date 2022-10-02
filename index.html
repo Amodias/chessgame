@@ -21,7 +21,7 @@
         <script  type="module" src="/assets/game.js" ></script>
         <script type="module">
           import {setCookie,getCookie,checkCookie,hey} from '/assets/main.js' ;
-          var socket , username ,logged ,list_players ,connected_users;
+          var socket , username ,logged ,list_players ,connected_users ,current_connected_user;
           logged = false;
           $( document ).ready(function() {
             $('#createcookie').on('click',function(){
@@ -46,7 +46,11 @@
                     
                     connected_users = users ;
                     Object.values(users).forEach(user => {
-                      $('#online_players').append(`<li id=`+user.userID+` class="list-group-item  d-flex justify-content-between align-items-center" >`+ user.username +`<button data-id=`+user.userID+` class="creatroom btn btn-light"> </button>`);
+                      if(user.socketID != socket.id){
+                        $('#online_players').append(`<li id=`+user.userID+` class="list-group-item  d-flex justify-content-between align-items-center" >`+ user.username +`<button data-id=`+user.userID+` class="creatroom btn btn-light"><i class="fa-solid fa-play"></i></button>`);
+                      }else{
+                        current_connected_user = user; 
+                      }
                     });
                   });
                   
@@ -56,7 +60,7 @@
             }
             socket.on('user-connected',user => {
               connected_users[user.userID]= user[user.userID];
-              $('#online_players').append(`<li  id=`+user.userID+`  class="list-group-item  d-flex justify-content-between align-items-center" >`+ user.username +`<button data-id=`+user.userID+` class="creatroom btn btn-light"> </button>`);
+              $('#online_players').append(`<li  id=`+user.userID+`  class="list-group-item  d-flex justify-content-between align-items-center" >`+ user.username +`<button data-id=`+user.userID+` class="creatroom btn btn-light"><i class="fa-solid fa-play"></i></button>`);
             });
             socket.on('disconnect',function(){
               connected_users = {};
@@ -67,11 +71,17 @@
               $('#'+disconnecteduser.userID).remove();
             });
             
+            $("#online_players").on('click', '.creatroom',function(){
+               var opponentID= $(this).attr("data-id"); 
+               socket.emit('initiateroom' , connected_users[opponentID].socketID );
+               
+               
+               console.log (connected_users[opponentID].username  + "and" + current_connected_user.username);
+              });
+              socket.on('redirect', function(room) {
+                 window.location.href = '/MultiPlayer?roomid='+room;
+              });
           })
-          $("#online_players").on('click', '.creatroom',function(){
-             var opponentID= $(this).attr("data-id"); 
-             console.log (connected_users[opponentID]);
-          });
        </script>
     </head>
     <title>Chess Game ♔♕ </title>

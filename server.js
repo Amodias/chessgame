@@ -11,7 +11,7 @@ app.get('/', function(req, res){ res.sendFile(__dirname + '/index.html');;
 
 
 users = {};
-
+user = {};
 io.on('connection', function(socket){
    console.log('A user connected');
    socket.userID = randomId();
@@ -19,16 +19,24 @@ io.on('connection', function(socket){
    users[socket.userID] = {userID : socket.userID ,username : socket.username ,socketID :socket.id}; 
    console.log(users);
    socket.emit("users", users);
-   socket.broadcast.emit("user-connected", {
-      userID: socket.userID,
-      username: socket.username,
-      connected: true,
-      messages: [],
-    });
+   user[socket.userID] = {userID : socket.userID ,username : socket.username ,socketID :socket.id}; 
+   socket.broadcast.emit("user-connected",
+    user[socket.userID]);
    
+   socket.on('initiateroom' , function(socketid){
+      var room = randomId();
+      socket.broadcast.to(socketid).emit('redirect', room);
+      socket.emit('redirect', room);
 
-  
-
+   });
+   socket.on('createroom', room =>{
+     socket.join(room); 
+     console.log('hey bitches');
+   })
+   socket.on('changepawn', function(room , gamebox){
+      console.log(gamebox);
+      socket.broadcast.to(room).emit('applychangepawn', gamebox);
+   });
    socket.on('disconnect', function () {
       console.log(users);
       delete users[socket.userID];
