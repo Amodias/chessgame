@@ -21,29 +21,57 @@
         <script  type="module" src="/assets/game.js" ></script>
         <script type="module">
           import {setCookie,getCookie,checkCookie,hey} from '/assets/main.js' ;
-          hey();
-          var socket = io();
-          socket.on("connect", () => {
-            console.log(socket.id); 
-          });
+          var socket , username ,logged ,list_players ,connected_users;
+          logged = false;
           $( document ).ready(function() {
-            if(checkCookie()){
-              $(".register").hide();
-            }
             $('#createcookie').on('click',function(){
               if( $("#username").val().length === 0 ) {
                 $("#username").addClass('is-invalid');
               }else{
-                let username = $("#username").val();
+                username = $("#username").val();
                 setCookie("username", username, 7);
+                handle_logging(true);
               }
+            })   
+            if(checkCookie()){
+              $(".register").hide();
+              username = getCookie("username");
+              handle_logging(true);
+            }
+            function handle_logging(bool){
+              if(bool){
+                $(".register").hide();
+                socket = io('', {query: {username : username}});
+                  socket.on("users", (users) => {
+                    
+                    connected_users = users ;
+                    Object.values(users).forEach(user => {
+                      $('#online_players').append(`<li id=`+user.userID+` class="list-group-item  d-flex justify-content-between align-items-center" >`+ user.username +`<button data-id=`+user.userID+` class="creatroom btn btn-light"> </button>`);
+                    });
+                  });
+                  
+              }else{
+                $(".register").show();
+              }
+            }
+            socket.on('user-connected',user => {
+              connected_users[user.userID]= user[user.userID];
+              $('#online_players').append(`<li  id=`+user.userID+`  class="list-group-item  d-flex justify-content-between align-items-center" >`+ user.username +`<button data-id=`+user.userID+` class="creatroom btn btn-light"> </button>`);
+            });
+            socket.on('disconnect',function(){
+              connected_users = {};
+              $('#online_players').html('');
             })
-            // let username = $("#username").val();
-            let username = getCookie("username");
-
-            socket.emit('send-username', username);
+            socket.on('user-disconnected',disconnecteduser => {
+              delete connected_users[disconnecteduser.userID];
+              $('#'+disconnecteduser.userID).remove();
+            });
+            
           })
-          
+          $("#online_players").on('click', '.creatroom',function(){
+             var opponentID= $(this).attr("data-id"); 
+             console.log (connected_users[opponentID]);
+          });
        </script>
     </head>
     <title>Chess Game ♔♕ </title>
@@ -107,13 +135,8 @@
                   </div>
                 </div>
                 <div class="text-center loader my-2"></div> 
-                <ul class="list-group   d-none">
-                  <li class="list-group-item  text-center"> <h4>List of available players</h4></li>
-                  <li class="list-group-item  d-flex justify-content-between align-items-center" >Wanda Mcnamara <i class="fa-solid fa-play"></i></li>
-                  <li class="list-group-item  d-flex justify-content-between align-items-center">Cordelia Davie <i class="fa-solid fa-play"></i></li>
-                  <li class="list-group-item  d-flex justify-content-between align-items-center">Adele Bartlett <i class="fa-solid fa-play"></i></li>
-                  <li class="list-group-item  d-flex justify-content-between align-items-center">Ivan Spencer  <i class="fa-solid fa-play"></i></li>
-                  <li class="list-group-item  d-flex justify-content-between align-items-center">Darren William <i class="fa-solid fa-play"></i></li>
+                <ul id="online_players" class="list-group">
+                
                 </ul>
               </div>
               <div class="modal-footer">

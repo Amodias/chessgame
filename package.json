@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Amodias/ChessGame#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.18.1",
     "socket.io": "^4.5.1"
   }
