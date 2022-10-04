@@ -1,3 +1,4 @@
+import {} from '/socket.io/socket.io.js';
 import {get_possible_play_id} from './game.js' ;
 
 // Setting up cookies 
@@ -71,8 +72,28 @@ function switch_player_side(player_side){
 
 
 $( document ).ready(function() {
+    var socket , username ,room;
+
+    if(checkCookie()){
+        username = getCookie("username");
+        socket = io('', {query: {username : username}});
+        
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        room = urlParams.get('roomid');
+        socket.emit('createroom', room);
+      }else{
+        window.location.href = '';
+      }
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    room = urlParams.get('roomid');
     var player_side = "";
-    function select_side(){
+    socket.on('side', side => {
+        player_side = side;
+        console.log(player_side);
+    });
+    /*function select_side(){
         $('.game-box').css('filter',' blur(4px)');
         $('#select_side_model').modal({backdrop: 'static', keyboard: false})
         $('.modal').appendTo('#Game');
@@ -83,8 +104,13 @@ $( document ).ready(function() {
          player_side = $(this).children(":first").attr('id');
     })
     setTimeout(select_side, 500);
+    */
     set_bg();
     show_tooltip();
+    socket.on('applychangepawn', function(idpawn ,idcase){
+        $('#'+idpawn).hide().prependTo(idcase).fadeIn();
+        console.log(idpawn , idcase);
+    });
     $('.chess_element').on('click', function(event){
         event.preventDefault();
         var bool_play_once = true;
@@ -127,6 +153,7 @@ $( document ).ready(function() {
                             if(bool_play_once){
                                 var $this = $(this);
                                 $this.empty();
+                                socket.emit('changepawn',room , selected_id , yx );
                                 $("#"+selected_id).hide().prependTo("#"+$this.attr('id')).fadeIn();
                                 set_bg();
                                 $(yx).off('click');

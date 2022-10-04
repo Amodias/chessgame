@@ -24,23 +24,8 @@
     <title>Chess Game | Ready to play</title>
     <body>
       <script type="module">
-          import {setCookie,getCookie,checkCookie,hey} from '/assets/main.js' ;
-          var socket , username ,room;
-          $( document ).ready(function() { 
-
-            if(checkCookie()){
-              username = getCookie("username");
-              socket = io('', {query: {username : username}});
-              const queryString = window.location.search;
-              const urlParams = new URLSearchParams(queryString);
-              room = urlParams.get('roomid');
-              socket.emit('createroom', room);
-            }else{
-              window.location.href = '';
-            }
-              
-             });
-            
+          import {setCookie,getCookie,checkCookie,hey} from '/main.js' ;
+          
       </script>
         <div id="particles-js" style="z-index:-10"></div>
         <div class="" style="z-index:10;" >
