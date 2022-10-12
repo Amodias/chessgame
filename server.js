@@ -20,6 +20,7 @@ function removeItemOnce(arr, value) {
 users = {};
 user = {};
 room_user_connected = [];
+var side ;
 io.on('connection', function(socket){
    console.log('A user connected');
    socket.userID = randomId();
@@ -40,11 +41,19 @@ io.on('connection', function(socket){
    socket.on('createroom', function(room){
       room_user_connected.push(socket.id);
       socket.join(room); 
+      side = 'b';
       socket.broadcast.to(room_user_connected[0]).emit('side', 'b');
-      if(room_user_connected.length == 2){
+      
+   });
+   socket.on('changeside' ,function(){
+      if(side == 'b'){
          socket.broadcast.to(room_user_connected[1]).emit('side', 'w');
+         side ='w';
+      }else{
+         socket.broadcast.to(room_user_connected[0]).emit('side', 'b');
+         side ='b';
+
       }
-      console.log(room_user_connected[0]);
    });
    socket.on('changepawn', function(room , idpawn , idcase){
       console.log(idpawn , idcase);

@@ -108,6 +108,7 @@ $( document ).ready(function() {
     set_bg();
     show_tooltip();
     socket.on('applychangepawn', function(idpawn ,idcase){
+        $(idcase).empty();
         $('#'+idpawn).hide().prependTo(idcase).fadeIn();
         console.log(idpawn , idcase);
     });
@@ -154,11 +155,13 @@ $( document ).ready(function() {
                                 var $this = $(this);
                                 $this.empty();
                                 socket.emit('changepawn',room , selected_id , yx );
+                                socket.emit('changeside');
+                                player_side = "";
                                 $("#"+selected_id).hide().prependTo("#"+$this.attr('id')).fadeIn();
                                 set_bg();
                                 $(yx).off('click');
                                 bool_play_once = false ;
-                                player_side = switch_player_side(player_side);
+                                //player_side = switch_player_side(player_side);
                             }  
                         })
                     }    
