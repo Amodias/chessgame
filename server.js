@@ -19,7 +19,7 @@ function removeItemOnce(arr, value) {
 
 users = {};
 user = {};
-room_user_connected = [];
+user_connected_in_room = {};
 var side ;
 io.on('connection', function(socket){
    console.log('A user connected');
