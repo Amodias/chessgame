@@ -365,3 +365,22 @@ export function get_possible_play_id(chess_pawn , chess_side ,axisx ,axisy ,sele
     }
         return possible_play_id ;
 };
+
+export function check_echec(){
+    $('.chess-line').children().each(function() {
+        var chess_element = [];
+        if($(this).children().length > 0){
+            var selected_id =  $(this).children().attr('id');
+            var p_id = $(this).split('_');
+            var axis  = [];
+            axis['x'] = (p_id[0]);
+            axis['y'] = (p_id[1]);
+            var element =  selected_id.split('_');
+            chess_element['pawn'] = element[0];
+            chess_element['side'] = element[1];
+            chess_element['position'] = element[2];
+            console.log(p_id);
+            // var possible_play_id = get_possible_play_id(chess_element['pawn'],chess_element['side'],axis['x'],axis['y'],"#"+p_id);
+        }
+    });     
+};

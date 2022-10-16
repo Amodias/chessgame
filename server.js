@@ -19,6 +19,8 @@ function removeItemOnce(arr, value) {
 
 users = {};
 user = {};
+array = [];
+room_array = [];
 user_connected_in_room = {};
 var side ;
 io.on('connection', function(socket){
@@ -28,8 +30,9 @@ io.on('connection', function(socket){
    users[socket.userID] = {userID : socket.userID ,username : socket.username ,socketID :socket.id}; 
    socket.emit("users", users);
    user[socket.userID] = {userID : socket.userID ,username : socket.username ,socketID :socket.id}; 
-   socket.broadcast.emit("user-connected",
-    user[socket.userID]);
+   
+   
+   socket.broadcast.emit("user-connected", JSON.stringify(user[socket.userID]));
    
    socket.on('initiateroom' , function(socketid){
       var room = randomId();
@@ -39,18 +42,26 @@ io.on('connection', function(socket){
 
    });
    socket.on('createroom', function(room){
-      room_user_connected.push(socket.id);
       socket.join(room); 
       side = 'b';
-      socket.broadcast.to(room_user_connected[0]).emit('side', 'b');
+      if(user_connected_in_room[room] != null ){
+         user_connected_in_room[room].push(socket.id);
+      }else{
+         user_connected_in_room[room] = Array();
+         user_connected_in_room[room].push(socket.id);
+      }
+      array = user_connected_in_room[room] ;
+      console.log(user_connected_in_room[room]);
+      socket.broadcast.to(array[0]).emit('side', 'b');
       
    });
-   socket.on('changeside' ,function(){
+   socket.on('changeside' ,function(room){
+      array = user_connected_in_room[room];
       if(side == 'b'){
-         socket.broadcast.to(room_user_connected[1]).emit('side', 'w');
+         socket.broadcast.to(array[1]).emit('side', 'w');
          side ='w';
       }else{
-         socket.broadcast.to(room_user_connected[0]).emit('side', 'b');
+         socket.broadcast.to(array[0]).emit('side', 'b');
          side ='b';
 
       }
@@ -66,9 +77,13 @@ io.on('connection', function(socket){
          username: socket.username,
          connected: false,
        });
-       for (const element of room_user_connected) { // You can use `let` instead of `const` if you like
-         if(element  == socket.id){
-            room_user_connected = removeItemOnce(room_user_connected , socket.id);
+       for (const key in user_connected_in_room) { 
+         array = user_connected_in_room[key];
+         for (element of array){
+
+            if(element  == socket.id){
+               delete user_connected_in_room[key];
+            }
          }
      }
       console.log('A user disconnected');

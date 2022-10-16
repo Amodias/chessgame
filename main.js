@@ -155,7 +155,7 @@ $( document ).ready(function() {
                                 var $this = $(this);
                                 $this.empty();
                                 socket.emit('changepawn',room , selected_id , yx );
-                                socket.emit('changeside');
+                                socket.emit('changeside',room);
                                 player_side = "";
                                 $("#"+selected_id).hide().prependTo("#"+$this.attr('id')).fadeIn();
                                 set_bg();
@@ -182,4 +182,3 @@ $( document ).ready(function() {
     });
 
 });
-

@@ -1,4 +1,4 @@
-import {get_possible_play_id} from './game.js' ;
+import {get_possible_play_id , check_echec} from './game.js' ;
 
 // Setting up cookies 
 
@@ -150,6 +150,6 @@ $( document ).ready(function() {
     $("#restore_class").on('click',function(){
         show_tooltip();
     });
-
+    
+    check_echec();     
 });
-

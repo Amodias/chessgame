@@ -59,7 +59,9 @@
               }
             }
             socket.on('user-connected',user => {
-              connected_users[user.userID]= user[user.userID];
+              user = JSON. parse(user);
+              connected_users[user.userID]= user;
+              // console.log('i m here :'+ user['socketID']);
               $('#online_players').append(`<li  id=`+user.userID+`  class="list-group-item  d-flex justify-content-between align-items-center" >`+ user.username +`<button data-id=`+user.userID+` class="creatroom btn btn-light"><i class="fa-solid fa-play"></i></button>`);
             });
             socket.on('disconnect',function(){
@@ -73,9 +75,8 @@
             
             $("#online_players").on('click', '.creatroom',function(){
                var opponentID= $(this).attr("data-id"); 
+               console.log(connected_users[opponentID]);
                socket.emit('initiateroom' , connected_users[opponentID].socketID );
-               
-               
                console.log (connected_users[opponentID].username  + "and" + current_connected_user.username);
               });
               socket.on('redirect', function(room) {
