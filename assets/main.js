@@ -1,4 +1,4 @@
-import {get_possible_play_id , check_echec} from './game.js' ;
+import {get_possible_play_id , check_echec_on_play,check_echec_before_play} from './game.js' ;
 
 // Setting up cookies 
 
@@ -43,7 +43,7 @@ function set_bg(){
             var odd = ((i+y)%2);
             $(id).removeClass('bg-to-play kill-effect');
             if(odd == 0){
-                $(id).addClass('bg-dark dark-box');
+                $(id).addClass('bg-dark dark-box bg-forbidden');
             }else{
                 $(id).addClass('bg-light light-box');
             }
@@ -87,58 +87,71 @@ $( document ).ready(function() {
     show_tooltip();
     $('.chess_element').on('click', function(event){
         event.preventDefault();
+        var $this = $(this);
+        var selected_id =  $this.attr('id');
+        var parent_id = $this.parent().attr('id');
         var bool_play_once = true;
         var bool_play_same_pawn = false ;
         set_bg();
-        var $this = $(this);
+        
         var chess_element = [];
-        var selected_id =  $this.attr('id');
+        
         var element =  selected_id.split('_');
         chess_element['pawn'] = element[0];
         chess_element['side'] = element[1];
         chess_element['position'] = element[2];
-        if(chess_element['side'] != player_side ){
-            return ;
-        }
-        var parent_id = $this.parent().attr('id');
-        var p_id = parent_id.split('_');
-        var axis  = [];
-        axis['x'] = (p_id[0]);
-        axis['y'] = (p_id[1]);
-        var possible_play_id = get_possible_play_id(chess_element['pawn'],chess_element['side'],axis['x'],axis['y'],"#"+parent_id);
-        if(possible_play_id.length > 0){
-             bool_play_same_pawn = true;
-        }
-                for ( const yx of possible_play_id){
-                        if($(yx).hasClass("dark-box")){
-                            $(yx).removeClass('bg-dark');
-                        }
-                        if($(yx).hasClass("light-box")){
-                            $(yx).removeClass('bg-light');
-                        }
-                        if($(yx).children().length != 0){
-                            $(yx).addClass('kill-effect');
-                        }else{
-                            $(yx).addClass('bg-to-play');
-                        }
-                    if(bool_play_same_pawn){
-                        $(yx).on('click',function(event){
-                            event.preventDefault();
-                            if(bool_play_once){
-                                var $this = $(this);
-                                $this.empty();
-                                $("#"+selected_id).hide().prependTo("#"+$this.attr('id')).fadeIn();
-                                set_bg();
-                                $(yx).off('click');
-                                bool_play_once = false ;
-                                player_side = switch_player_side(player_side);
-                            }  
-                        })
-                    }    
-            }      
-            bool_play_same_pawn = false;
-            show_tooltip();
-    })
+        var check_can = check_echec_on_play('#'+parent_id,chess_element['side']);
+        console.log(chess_element['pawn']);
+        if(!check_can || chess_element['pawn'] == 'king'){
+            if(chess_element['side'] != player_side ){
+                return ;
+            }
+            var parent_id = $this.parent().attr('id');
+            var p_id = parent_id.split('_');
+            var axis  = [];
+            axis['x'] = (p_id[0]);
+            axis['y'] = (p_id[1]);
+            var possible_play_id = get_possible_play_id(chess_element['pawn'],chess_element['side'],axis['x'],axis['y'],"#"+parent_id,null);
+            if(possible_play_id.length > 0){
+                bool_play_same_pawn = true;
+            }
+                    for ( const yx of possible_play_id){
+                            if($(yx).hasClass("dark-box")){
+                                $(yx).removeClass('bg-dark');
+                            }
+                            if($(yx).hasClass("light-box")){
+                                $(yx).removeClass('bg-light');
+                            }
+                            if($(yx).children().length != 0){
+                                $(yx).addClass('kill-effect');
+                            }else{
+                                $(yx).addClass('bg-to-play');
+                            }
+                        if(bool_play_same_pawn){
+                            $(yx).on('click',function(event){
+                                event.preventDefault();
+                                if(bool_play_once){
+                                    var $this = $(this);
+                                    $this.empty();
+                                    $("#"+selected_id).hide().prependTo("#"+$this.attr('id')).fadeIn();
+                                    set_bg();
+                                    $(yx).off('click');
+                                    bool_play_once = false ;
+                                    player_side = switch_player_side(player_side);
+                                    check_echec_before_play();
+                                }  
+                            })
+                        }    
+                }      
+                bool_play_same_pawn = false;
+                show_tooltip();
+            }else{
+              $('#'+parent_id).removeClass('bg-dark bg-light');
+
+              $('#'+parent_id).addClass('bg-forbidden');
+            }
+
+    });
     
     $('#show_possible_play_id').on('click',function(){
         if(typeof possible_play_id === 'undefined' || possible_play_id === null){
@@ -151,5 +164,5 @@ $( document ).ready(function() {
         show_tooltip();
     });
     
-    check_echec();     
+      
 });
