@@ -1,11 +1,30 @@
 var express = require('express'); // Get the module
 var app = express();
 var http = require('http').Server(app);
+var subdomain = require('express-subdomain');
 var io = require('socket.io')(http);
+var router = express.Router()
+var singleplayer = express.Router();
+var multiplayer = express.Router();
+
+singleplayer.get('/test', function(req, res) {
+   res.status(201).json({message:"Successfully Registered"});
+});
+multiplayer.get('/test', function(req, res) {
+   res.status(201).json({message:"Successfully Registered"});
+});
+
+router.use(subdomain('single', singleplayer));
+router.use(subdomain('multi', multiplayer));
+
+
+
+
 const crypto = require("crypto");
 const randomId = () => crypto.randomBytes(8).toString("hex");
 app.use(express.static(__dirname));
-app.get('/', function(req, res){ res.sendFile(__dirname + '/index.html');;
+
+router.get('/', function(req, res){ res.sendFile(__dirname + '/index.html');;
 });
 
 function removeItemOnce(arr, value) {
@@ -90,6 +109,12 @@ io.on('connection', function(socket){
    });
 
 });
-http.listen(3000, function(){
-   console.log('listening on *:3000');
+
+
+app.use(subdomain('single', router));
+app.use(subdomain('multi', router));
+console.log(subdomain);
+
+app.listen(80, function(){
+   console.log('listening on *:80');
 });
