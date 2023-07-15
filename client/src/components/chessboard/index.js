@@ -1,6 +1,6 @@
 import React from 'react';
-import { ChessboardRow ,ChessboardContainer ,ChessboardSquare } from '../../styles/ChessBoardStyles';
-
+import { ChessboardRow ,ChessboardContainer ,ChessboardSquare } from './styles';
+import Pawn from '../pawns/pawn';
 const ChessBoard = () => {
   const renderChessboard = () => {
     const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -13,10 +13,11 @@ const ChessBoard = () => {
             key={column + row}
             sx={{
               backgroundColor:
-                (rowIndex + columnIndex) % 2 === 0 ? '#FFF' : '#DDD',
+                (rowIndex + columnIndex) % 2 === 0 ? 'rgba(255, 255, 255, 0.75)' : 'rgba(84, 84, 84, 0.75)',
             }}
           >
             {`${column}${row}`}
+            
           </ChessboardSquare>
         ))}
       </ChessboardRow>
