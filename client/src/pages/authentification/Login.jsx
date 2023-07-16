@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../../styles/Authentification.css'; // CSS file for styling
+import { Link } from 'react-router-dom';
+import '../../styles/Authentification.css'; 
 import SpaceBackground from '../../components/particels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock ,faChess } from '@fortawesome/free-solid-svg-icons';
@@ -23,7 +24,7 @@ const Login = () => {
   };
 
   return (
-    <div className="login-wrapper">
+    <div className="auth-wrapper">
          <div className="background-container">
            <SpaceBackground />
          </div>
@@ -50,6 +51,12 @@ const Login = () => {
                 
             </div>
             <button type="submit" className="btn btn-primary">Login</button>
+            <div>
+            <Link to="/register" className="link-create-account">
+              Or Create an account.
+            </Link>
+                
+            </div>
             </form>
        </div>
     </div>
