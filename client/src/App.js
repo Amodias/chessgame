@@ -1,9 +1,12 @@
 import './styles/App.css';
 import Board from './pages/Board';
+import Login from './pages/authentification/Login';
 function App() {
   return (
     <div className="App">
-        <Board  />
+        <Login  />
+        {/* <Board  /> */}
+
     </div>
   );
 }
