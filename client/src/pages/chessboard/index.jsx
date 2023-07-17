@@ -1,7 +1,9 @@
 import React from 'react';
-import '../styles/Board.css';
+import '../../styles/Board.css';
 import ChessBoard from "../../components/chessboard";
 import SpaceBackground from '../../components/particels';
+import Sidebar from '../../components/sidebar';
+
 
 export default function Board() {
   return (
@@ -10,6 +12,8 @@ export default function Board() {
         <SpaceBackground />
       </div>
       <div className="chessboard-container">
+      
+        <Sidebar/>
         <ChessBoard />
       </div>
     </div>
