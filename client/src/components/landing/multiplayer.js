@@ -21,15 +21,16 @@ const MultiplayerDescription = styled('div')({
 });
 
 const MultiplayerHeading = styled('h1')({
-  fontSize: '3rem',
+  fontSize: '2rem',
   fontWeight: 'bold',
   marginBottom: '2rem',
 });
 
+
 const MultiplayerContent = styled('p')({
-  fontSize: '1.5rem',
+  fontSize: '1.2rem',
   textAlign: 'center',
-  maxWidth: '800px',
+  maxWidth: '500px',
 });
 
 export const MultiplayerComponentFirstColumn = () => {
