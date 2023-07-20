@@ -7,7 +7,9 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ required: true })
+    _id: any;
+
+  @Prop({ required: true, unique: true })
   username: string;
 
   @Prop({ required: true, unique: true }) // Set unique to ensure no duplicate email addresses

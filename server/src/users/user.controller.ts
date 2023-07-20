@@ -1,18 +1,30 @@
-// src/users/user.controller.ts
-import { Controller, Post, Body, HttpStatus, HttpException } from '@nestjs/common';
+// users/user.controller.ts
+
+import { Controller, Get, Post, Body, HttpStatus, HttpException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './schemas/user.schema';
+
+
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     try {
-      return await this.userService.create(createUserDto);
+      const user = await this.userService.createUser(createUserDto);
+      return  user;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @Get()
+  async findAllUsers(): Promise<User[]> {
+    return this.userService.findAllUsers();
   }
 }
