@@ -4,7 +4,7 @@ import '../../styles/Authentification.css';
 import SpaceBackground from '../../components/particels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock ,faChess } from '@fortawesome/free-solid-svg-icons';
-
+import { LoginUser } from '../../services/auth';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -19,8 +19,8 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Perform login authentication logic
-    // You can use the username and password state values here
+    const response = LoginUser({username, password}); 
+    // console.log(response);
   };
 
   return (
@@ -35,11 +35,11 @@ const Login = () => {
             </div>
             <form>
             <div className="form-group">
-                <input type="email" className="form-control" placeholder="Email" />
+                <input onChange={(e) => handleUsernameChange(e)} type="email" className="form-control" placeholder="Email" />
                 <FontAwesomeIcon icon={faEnvelope} className="icon" />
             </div>
             <div className="form-group">
-                <input type="password" className="form-control" placeholder="Password" />
+                <input onChange={(e) => handlePasswordChange(e)} type="password" className="form-control" placeholder="Password" />
                 <FontAwesomeIcon icon={faLock} className="icon" />
             </div>
             <div className="form-group form-inline">
@@ -50,7 +50,7 @@ const Login = () => {
                 <a class="form-pwd-reset" href="">Forgot password ?</a>
                 
             </div>
-            <button type="submit" className="btn btn-primary">Login</button>
+            <button onClick={handleSubmit} type="submit" className="btn btn-primary">Login</button>
             <div>
             <Link to="/register" className="link-create-account">
               Or Create an account.
