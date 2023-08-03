@@ -4,7 +4,7 @@ import Login from './pages/authentification/Login';
 import Register from './pages/authentification/Register';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+//test commits 
 function App() {
   return (
     <div className="App">
