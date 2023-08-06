@@ -31,4 +31,15 @@ export class AuthService {
     }
   }
 
+  async verifyToken(token) {
+    try {
+
+      const decoded = this.jwtService.verify(  token); 
+      const { sub: userId,  username } = decoded;
+      return { isValid: true,  username };
+    } catch (error) {
+      return { isValid: false, token : token , error: error.message };
+    }
+  }
+
 }

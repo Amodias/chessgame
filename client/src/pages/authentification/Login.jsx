@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 import '../../styles/Authentification.css'; 
 import SpaceBackground from '../../components/particels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,7 @@ import { LoginUser } from '../../services/auth';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -20,6 +21,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const response = LoginUser({username, password}); 
+    response ?  navigate('/') :  navigate('/login');
     // console.log(response);
   };
 

@@ -7,7 +7,7 @@ import { User } from './schemas/user.schema';
 
 
 
-@Controller('users')
+@Controller('api/users')
 export class UserController {
   constructor(
     private readonly userService: UserService,

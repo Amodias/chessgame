@@ -6,6 +6,7 @@ import { UsersModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './auth/constants';
+import { GameGateway } from './games/game.gateway';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { jwtConstants } from './auth/constants';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService , GameGateway],
 })
 export class AppModule {}
 

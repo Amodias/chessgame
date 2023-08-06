@@ -1,9 +1,9 @@
 import '../../styles/Dashboard.css'
 import '../../index.css'
-
+import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faUser, faGlobe, faMicrochip, faSignOutAlt, faBars, faChessBoard } from '@fortawesome/free-solid-svg-icons';
+import {  faUser, faGlobe, faMicrochip, faSignOutAlt, faBars, faChessBoard } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
   const [isExpanded, setExpanded] = useState(false);
@@ -26,26 +26,34 @@ const Sidebar = () => {
       </div>
       <div className={`sidebar-content sidebar ${isExpanded ? 'expanded' : ''} bg-black text-white py-4 px-2 flex flex-col justify-start`}>
         <ul className={`menu-items ${isExpanded ? 'expanded' : ''} mt-4`}>
-          <li className="flex items-center mb-2">
+          {/* <li className="flex items-center mb-2">
             <FontAwesomeIcon color='white' icon={faUser} className="mr-2" />
             {isExpanded && <span className="font-semibold">User</span>}
-          </li>
-          <li className="flex items-center mb-2">
-            <FontAwesomeIcon color='white' icon={faGlobe} className="mr-2" />
-            {isExpanded && <span className="font-semibold">Multi-Player</span>}
-          </li>
-          <li className="flex items-center mb-2">
-            <FontAwesomeIcon color='white' icon={faMicrochip} className="mr-2" />
-            {isExpanded && <span className="font-semibold">AI</span>}
-          </li>
-          <li className="flex items-center mb-2">
-            <FontAwesomeIcon color='white' icon={faChessBoard} className="mr-2" />
-            {isExpanded && <span className="font-semibold">Alone</span>}
-          </li>
-          <li className="flex items-center mt-8">
-            <FontAwesomeIcon color='white' icon={faSignOutAlt} className="mr-2" />
-            {isExpanded && <span className="font-semibold">Sign Out</span>}
-          </li>
+          </li> */}
+          <Link to="/single-player">
+            <li className="flex items-center mb-2">
+                <FontAwesomeIcon color='white' icon={faChessBoard} className="mr-2" />
+                {isExpanded && <span className="font-semibold">Single-Player</span>}
+            </li>
+          </Link>
+          <Link to="/multi-player">
+            <li className="flex items-center mb-2">
+                <FontAwesomeIcon color='white' icon={faGlobe} className="mr-2" />
+                {isExpanded && <span className="font-semibold">Multi-Player</span>}
+            </li>
+          </Link>
+          <Link to="/vs-ia">
+            <li className="flex items-center mb-2">
+                <FontAwesomeIcon color='white' icon={faMicrochip} className="mr-2" />
+                {isExpanded && <span className="font-semibold">VS-AI</span>}
+            </li>
+          </Link>
+          <Link to="/logout">
+            <li className="flex items-center mt-8">
+                <FontAwesomeIcon color='white' icon={faSignOutAlt} className="mr-2" />
+                {isExpanded && <span className="font-semibold">Sign Out</span>}
+            </li>
+          </Link>
         </ul>
       </div>
     </div>
