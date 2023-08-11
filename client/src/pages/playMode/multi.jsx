@@ -4,16 +4,22 @@ import ChessBoard from "../../components/chessboard";
 import SpaceBackground from '../../components/particels';
 import Sidebar from '../../components/sidebar';
 import socketService from '../../services/socketServices';
+import LoadingComponent from '../../components/loading/settingroom';
+
 const Multi = () => {
   const [gameStarted, setGameStarted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    socketService.connect(); // Connect to the socket when the component mounts
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
-    
+    socketService.connect(); 
 
     return () => {
-      socketService.disconnect(); // Disconnect when the component unmounts
+      socketService.disconnect(); 
+      clearTimeout(loadingTimeout); 
     };
   }, []);
 
@@ -24,7 +30,9 @@ const Multi = () => {
       </div>
       <div className="chessboard-container">
         <Sidebar/>
-        <ChessBoard />
+        <LoadingComponent isLoading={isLoading}>
+          <ChessBoard />
+        </LoadingComponent>
       </div>
     </div>
   );
