@@ -11,6 +11,14 @@ const socketService = {
 
   disconnect() {
     this.socket.disconnect();
+  },
+  checkRoom(){
+    const rooms = this.socket.rooms;
+    console.log(rooms);
+    return (rooms) ? true : false ; 
+  },
+  isConnected() {
+    return this.socket.connected;
   }
 };
 

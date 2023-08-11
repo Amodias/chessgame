@@ -4,7 +4,7 @@ import React from 'react';
 const LoadingComponent = ({ isLoading, children }) => {
   return (
     <div>
-      {isLoading ? (
+      {isLoading? (
         <div className="loading-spinner">
           <div className="spinner"></div>
           <p>Creating a room for multiplayer chess...</p>

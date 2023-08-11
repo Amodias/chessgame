@@ -7,19 +7,33 @@ import socketService from '../../services/socketServices';
 import LoadingComponent from '../../components/loading/settingroom';
 
 const Multi = () => {
-  const [gameStarted, setGameStarted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    const checkRoomInterval = setInterval(() => {
+      if (socketService.checkRoom()) {
+        clearInterval(checkRoomInterval);
+        setIsLoading(false);
+      }
+    }, 500);
 
-    socketService.connect(); 
+
+    const isConnected = socketService.isConnected();
+    if (!isConnected) {
+      socketService.connect();
+    }
+
+    const unloadHandler = (event) => {
+      event.preventDefault();
+      event.returnValue = ''; 
+    };
+
+    window.addEventListener('beforeunload', unloadHandler);
 
     return () => {
-      socketService.disconnect(); 
-      clearTimeout(loadingTimeout); 
+      socketService.disconnect();
+      clearInterval(checkRoomInterval);
+      window.removeEventListener('beforeunload', unloadHandler);
     };
   }, []);
 
@@ -30,7 +44,7 @@ const Multi = () => {
       </div>
       <div className="chessboard-container">
         <Sidebar/>
-        <LoadingComponent isLoading={isLoading}>
+        <LoadingComponent isLoading={isLoading} >
           <ChessBoard />
         </LoadingComponent>
       </div>
