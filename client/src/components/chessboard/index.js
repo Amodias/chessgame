@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState , FC } from 'react';
 import { ChessboardRow, ChessboardContainer, ChessboardSquare } from './styles';
 import { initilaeState } from './intiale-state';
 import { Chess } from 'chess.js';
 import { movePawn, getPossibleMoves } from '../../services/pawn-actions';
 
-const ChessBoard = () => {
-  const [chess] = useState(new Chess());
+
+
+const ChessBoard  = (props) =>  {
+  const [chess] = useState( props.chess ? props.chess :  new Chess());
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [possibleMoves, setPossibleMoves] = useState([]);
   const [pawnComponents, setPawnComponents] = useState(initilaeState);
