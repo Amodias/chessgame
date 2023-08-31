@@ -14,7 +14,7 @@ const socketService = {
   },
   checkRoom() {
     return new Promise((resolve) => {
-      this.socket.on('LoadingStateChanged', () => {
+      this.socket.on('MultiPlayerRoomCreated', () => {
         resolve(true);
       });
     });
