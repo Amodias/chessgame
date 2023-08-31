@@ -5,13 +5,7 @@ import { loadSlim } from "tsparticles-slim";
 
 const SpaceBackground = () => {
   const particlesInit = useCallback(async engine => {
-        console.log(engine);
-
         await loadSlim(engine);
-    }, []);
-
-    const particlesLoaded = useCallback(async container => {
-        await console.log(container);
     }, []);
 
     const particlesOptions = {
@@ -120,7 +114,6 @@ const SpaceBackground = () => {
       <Particles
         id="tsparticles"
         init={particlesInit}
-        loaded={particlesLoaded}
         options={particlesOptions}
         style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%'  }}
       />

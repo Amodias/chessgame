@@ -1,6 +1,5 @@
 
 export const movePawn = (chess, from, to) => {
-    console.log(chess);
     convertNotationToPosition(to);
     const move = chess.move({ from, to });
     return move;

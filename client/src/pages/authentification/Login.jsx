@@ -22,7 +22,6 @@ const Login = () => {
     event.preventDefault();
     const response = LoginUser({username, password}); 
     response ?  navigate('/') :  navigate('/login');
-    // console.log(response);
   };
 
   return (
