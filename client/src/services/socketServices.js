@@ -21,6 +21,12 @@ const socketService = {
   },
   isConnected() {
     return this.socket.connected;
+  },
+  emitPawnMove(){
+
+  },
+  onPawnMove(){
+    
   }
 };
 
