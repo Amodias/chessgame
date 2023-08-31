@@ -12,11 +12,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  pairedSockets: Set<Socket> = new Set(); // Keep track of paired sockets
-
+  pairedSockets: Set<Socket> = new Set();
   constructor() {
-    // Start a timer to periodically check for rooms and emit events
-    setInterval(this.checkRoomsAndEmitEvents.bind(this), 500); // Adjust the interval as needed
+    setInterval(this.checkRoomsAndEmitEvents.bind(this), 500);
   }
   handleConnection(client: Socket) {
     if (!this.pairedSockets.has(client)) {
@@ -27,11 +25,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private checkRoomsAndEmitEvents() {
     if (this.pairedSockets.size >= 2) {
       const pair = Array.from(this.pairedSockets);
-      // this.pairedSockets.clear();
+
       const roomId = pair.map((socket) => socket.id).join('-');
       pair.forEach((socket) => {
         socket.join(roomId);
-        socket.emit('LoadingStateChanged');
+        socket.emit('MultiPlayerRoomCreated');
       });
     }
   }
