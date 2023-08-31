@@ -4,6 +4,8 @@ import SpaceBackground from "../../../components/particels";
 import Sidebar from "../../../components/sidebar";
 import socketService from "../../../services/socketServices";
 import LoadingComponent from "../../../components/loading/settingroom";
+import MultiPlayerChessBoard from "./multi-player-chess-board";
+
 import { useNavigate } from "react-router-dom";
 
 const MultiPlayer = () => {
@@ -46,10 +48,7 @@ const MultiPlayer = () => {
         {!failed && isLoading ? (
           <LoadingComponent />
         ) : (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-            <p>You will be redirected in a room soon...</p>
-          </div>
+          <MultiPlayerChessBoard />
         )}
       </div>
     </div>
