@@ -22,11 +22,12 @@ const socketService = {
   isConnected() {
     return this.socket.connected;
   },
-  emitPawnMove(){
-
+  emitPawnMove(chessState){
+      this.socket.emit("emit-pawn-move" , chessState)
   },
   onPawnMove(){
-    
+    this.socket.on("on-pawn-move" , chessState)
+    return chessState;
   }
 };
 
