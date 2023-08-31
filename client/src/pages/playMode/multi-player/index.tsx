@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const MultiPlayer = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   const navigate = useNavigate();
   const isConnected = socketService.isConnected();
   if (!isConnected) {
@@ -20,15 +21,15 @@ const MultiPlayer = () => {
       if (roomStatus) {
         setIsLoading(!roomStatus);
       }
-    }, 1000); // Adjust the interval as needed
+      if (!isLoading && !roomStatus) {
+        setFailed(false);
+      }
+    }, 1000);
 
-    // Clean up the interval when the component unmounts
     return () => {
       clearInterval(checkRoomInterval);
     };
   }, [isConnected]);
-
-  // Connect to the socket service if not already connected
 
   return (
     <div className="board-wrapper">
@@ -37,7 +38,12 @@ const MultiPlayer = () => {
       </div>
       <div className="chessboard-container">
         <Sidebar />
-        {isLoading ? (
+        {failed && (
+          <div className="loading-spinner">
+            <p>Connexion failed, try to reload the page !</p>
+          </div>
+        )}
+        {!failed && isLoading ? (
           <LoadingComponent />
         ) : (
           <div className="loading-spinner">
