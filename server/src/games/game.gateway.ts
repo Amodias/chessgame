@@ -16,16 +16,17 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor() {
     setInterval(this.checkRoomsAndEmitEvents.bind(this), 500);
   }
+
   handleConnection(client: Socket) {
     if (!this.pairedSockets.has(client)) {
       this.pairedSockets.add(client);
     }
     Socket;
   }
+
   private checkRoomsAndEmitEvents() {
     if (this.pairedSockets.size >= 2) {
       const pair = Array.from(this.pairedSockets);
-
       const roomId = pair.map((socket) => socket.id).join('-');
       pair.forEach((socket) => {
         socket.join(roomId);
@@ -33,6 +34,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       });
     }
   }
+
+  @SubscribeMessage('emit-pawn-move')
+  handlePawnMove(client: Socket, chessState: any) {}
+
   handleDisconnect(client: Socket) {
     this.pairedSockets.delete(client);
   }

@@ -6,8 +6,8 @@ import { movePawn, getPossibleMoves } from '../../services/pawn-actions';
 
 
 
-const ChessBoard  = (props) =>  {
-  const [chess] = useState( props.chess ? props.chess :  new Chess());
+const ChessBoard  = ({chessStateChanger}) =>  {
+  const [chess] = useState(new Chess());
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [possibleMoves, setPossibleMoves] = useState([]);
   const [pawnComponents, setPawnComponents] = useState(initilaeState);
@@ -26,8 +26,9 @@ const ChessBoard  = (props) =>  {
     
     const handleMove = (to) => {
       if (selectedPosition && possibleMoves.includes(to)) {
-        movePawn(chess, selectedPosition, to);
         movePawnComponent(selectedPosition, to);
+        // console.log(movePawn(chess, selectedPosition, to));
+        chessStateChanger(movePawn(chess, selectedPosition, to));
         setSelectedPosition(null);
         setPossibleMoves([]);
       }
