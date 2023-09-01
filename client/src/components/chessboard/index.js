@@ -27,7 +27,6 @@ const ChessBoard  = ({chessStateChanger}) =>  {
     const handleMove = (to) => {
       if (selectedPosition && possibleMoves.includes(to)) {
         movePawnComponent(selectedPosition, to);
-        // console.log(movePawn(chess, selectedPosition, to));
         chessStateChanger(movePawn(chess, selectedPosition, to));
         setSelectedPosition(null);
         setPossibleMoves([]);
