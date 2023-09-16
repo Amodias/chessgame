@@ -8,9 +8,6 @@ import socketService from '../../services/socketServices';
 
 const ChessBoard  = ({ }) =>  {
   const [chess , setChess] = useState( new Chess());
- 
-
-  
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [receivedPosition, setReceivedPosition] = useState({});
   const [possibleMoves, setPossibleMoves] = useState([]);
@@ -25,20 +22,15 @@ const ChessBoard  = ({ }) =>  {
   };
 
   useEffect(() => {
-    
     movePawnComponent(receivedPosition.from , receivedPosition.to);
-
   }, [chess]);
 
   useEffect(() => {
     const handlePawnMove = (chessState ,  selectedPosition, to) => {
-      console.log('Received chess state:', selectedPosition, to);
       setReceivedPosition({from : selectedPosition,to : to})
       setChess(new Chess(chessState));
     };
-  
     socketService.onPawnMove(handlePawnMove);
-  
     return () => {
       socketService.offPawnMove();
     };
@@ -48,8 +40,6 @@ const ChessBoard  = ({ }) =>  {
     const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-   
-    
     const handleMove = (to) => {
       if (selectedPosition && possibleMoves.includes(to)) {
         movePawnComponent(selectedPosition, to);
