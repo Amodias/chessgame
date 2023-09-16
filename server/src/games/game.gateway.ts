@@ -30,13 +30,15 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const roomId = pair.map((socket) => socket.id).join('-');
       pair.forEach((socket) => {
         socket.join(roomId);
-        socket.emit('MultiPlayerRoomCreated');
+        socket.emit('MultiPlayerRoomCreated', roomId);
       });
     }
   }
 
   @SubscribeMessage('emit-pawn-move')
-  handlePawnMove(client: Socket, chessState: any) {}
+  handlePawnMove(client: Socket, { roomId, chessState }) {
+    client.to(roomId).emit('on-pawn-move', chessState);
+  }
 
   handleDisconnect(client: Socket) {
     this.pairedSockets.delete(client);

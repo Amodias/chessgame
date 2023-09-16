@@ -14,7 +14,8 @@ const socketService = {
   },
   checkRoom() {
     return new Promise((resolve) => {
-      this.socket.on('MultiPlayerRoomCreated', () => {
+      this.socket.on('MultiPlayerRoomCreated', (roomId) => {
+        this.socket.room = roomId ;
         resolve(true);
       });
     });
@@ -23,11 +24,12 @@ const socketService = {
     return this.socket.connected;
   },
   emitPawnMove(chessState){
-      this.socket.emit("emit-pawn-move" , chessState)
+      this.socket.emit("emit-pawn-move" , {roomId : this.socket.room , chessState : chessState})
   },
   onPawnMove(){
-    this.socket.on("on-pawn-move" , chessState)
-    return chessState;
+      this.socket.on('on-pawn-move', (chessState) => {
+        return(chessState);
+    });
   }
 };
 

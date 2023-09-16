@@ -3,11 +3,11 @@ import { ChessboardRow, ChessboardContainer, ChessboardSquare } from './styles';
 import { initilaeState } from './intiale-state';
 import { Chess } from 'chess.js';
 import { movePawn, getPossibleMoves } from '../../services/pawn-actions';
+import socketService from '../../services/socketServices';
 
 
-
-const ChessBoard  = ({chessStateChanger}) =>  {
-  const [chess] = useState(new Chess());
+const ChessBoard  = ({ chessState}) =>  {
+  const [chess] = useState((chessState)? chessState : new Chess());
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [possibleMoves, setPossibleMoves] = useState([]);
   const [pawnComponents, setPawnComponents] = useState(initilaeState);
@@ -27,7 +27,8 @@ const ChessBoard  = ({chessStateChanger}) =>  {
     const handleMove = (to) => {
       if (selectedPosition && possibleMoves.includes(to)) {
         movePawnComponent(selectedPosition, to);
-        chessStateChanger(movePawn(chess, selectedPosition, to));
+        const {chessState } = movePawn(chess, selectedPosition, to);
+        socketService.emitPawnMove(chessState);
         setSelectedPosition(null);
         setPossibleMoves([]);
       }

@@ -2,8 +2,8 @@
 export const movePawn = (chess, from, to) => {
     convertNotationToPosition(to);
     const move = chess.move({ from, to });
-    // console.log(move , chess);
-    return move;
+    const chessState = chess;
+    return {move , chessState};
   };
 
  export const getPossibleMoves = (chess, from ) => {
