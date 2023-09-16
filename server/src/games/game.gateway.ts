@@ -36,8 +36,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('emit-pawn-move')
-  handlePawnMove(client: Socket, { roomId, chessState }) {
-    client.to(roomId).emit('on-pawn-move', chessState);
+  handlePawnMove(client: Socket, { roomId, chessState, selectedPosition, to }) {
+    console.log(chessState);
+
+    client
+      .to(roomId)
+      .emit('on-pawn-move', { chessState, selectedPosition, to });
   }
 
   handleDisconnect(client: Socket) {

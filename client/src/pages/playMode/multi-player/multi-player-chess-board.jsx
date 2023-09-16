@@ -5,13 +5,13 @@ import socketService from "../../../services/socketServices";
 
 
 const MultiPlayerChessBoard = () => {
-  const [chessState , setChessState] = useState(null);
-  useEffect(() => {
-    socketService.onPawnMove((chessState) => {
-      setChessState(chessState);
-    });
-  }, []);
+  // const [chessState , setChessState] = useState(null);
+  // useEffect(() => {
+    // socketService.onPawnMove((chessState) => {
+    //   setChessState(chessState);
+    // });
+  // }, []);
 
-  return <ChessBoard chessStateChanger={setChessState} chessState={chessState}  />;
+  return <ChessBoard   />;
 };
 export default MultiPlayerChessBoard;

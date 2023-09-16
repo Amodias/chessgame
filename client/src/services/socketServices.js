@@ -23,13 +23,18 @@ const socketService = {
   isConnected() {
     return this.socket.connected;
   },
-  emitPawnMove(chessState){
-      this.socket.emit("emit-pawn-move" , {roomId : this.socket.room , chessState : chessState})
+  emitPawnMove(chessState , selectedPosition ,to){
+      this.socket.emit("emit-pawn-move" , {roomId : this.socket.room , chessState : chessState ,selectedPosition : selectedPosition , to : to })
   },
-  onPawnMove(){
-      this.socket.on('on-pawn-move', (chessState) => {
-        return(chessState);
+  onPawnMove(callback) {
+    this.socket.on('on-pawn-move', ({chessState  ,selectedPosition, to}) => {
+
+      console.log(chessState,  selectedPosition, to);
+      callback(chessState,  selectedPosition, to);
     });
+  },
+  offPawnMove(){
+   return  this.socket.off('on-pawn-move') ;
   }
 };
 
