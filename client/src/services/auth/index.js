@@ -6,9 +6,8 @@ export function LoginUser(payload) {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await api.post('/api/auth/login', payload);
-      const status = response.data.status;
-      if (status) localStorage.setItem('token', JSON.stringify(response.data.access_token));
-      resolve({ status: status });
+      localStorage.setItem('token', JSON.stringify(response.data.access_token));
+      resolve({ status: true });
     } catch (error) {
       reject({ status: false, message: error.response.data.message });
     }
@@ -21,9 +20,8 @@ export  function RegisterUser (payload) {
   return new Promise(async (resolve,reject)=> { 
     try { 
     const response =   await api.post('/api/auth/register', payload);
-    const status = response.data.status;
-    if (status) localStorage.setItem('token', JSON.stringify(response.data.access_token));
-    resolve({ status: status });
+    localStorage.setItem('token', JSON.stringify(response.data.access_token));
+    resolve({ status: true });
   } catch (error) {
     console.log(error.res);
     reject({ status: false, message: error.response.data.message });

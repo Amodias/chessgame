@@ -35,6 +35,9 @@ const Register = () => {
     const payload =  { username  , email, password} ;
     RegisterUser(payload)
     .then((result) => {
+      console.log('====================================');
+      console.log(result);
+      console.log('====================================');
       if(result.status) navigate('/') ;
     })
     .catch((error) => {
