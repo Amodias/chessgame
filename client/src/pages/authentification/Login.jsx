@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock ,faChess } from '@fortawesome/free-solid-svg-icons';
 import { LoginUser } from '../../services/auth';
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('s@s.s');
+  const [password, setPassword] = useState('123');
   const [validationError , setValidationError] = useState('')
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ const Login = () => {
       if(result.status) navigate('/') ;
     })
     .catch((error) => {
-      setValidationError(error.error)
+      error.message ? setValidationError(error.message) : setValidationError("Server Error")
     });
     
   };
@@ -43,11 +43,11 @@ const Login = () => {
             </div>
             <form>
             <div className="form-group">
-                <input onChange={(e) => handleUsernameChange(e)} type="email" className="form-control" placeholder="Email" />
+                <input onChange={(e) => handleUsernameChange(e)} value={username} type="email" className="form-control" placeholder="Email" />
                 <FontAwesomeIcon icon={faEnvelope} className="icon" />
             </div>
             <div className="form-group">
-                <input onChange={(e) => handlePasswordChange(e)} type="password" className="form-control" placeholder="Password" />
+                <input onChange={(e) => handlePasswordChange(e)} value={password} type="password" className="form-control" placeholder="Password" />
                 <FontAwesomeIcon icon={faLock} className="icon" />
             </div>
             <div className="form-group form-inline">
@@ -59,7 +59,7 @@ const Login = () => {
                 
             </div>
             {validationError && (
-              <div>
+              <div className='my-2'>
                 <p>{validationError}</p>
               </div>
                 )
