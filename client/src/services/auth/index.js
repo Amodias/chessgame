@@ -10,22 +10,25 @@ export function LoginUser(payload) {
       if (status) localStorage.setItem('token', JSON.stringify(response.data.access_token));
       resolve({ status: status });
     } catch (error) {
-      console.log(error.response.data.message);
-      reject({ status: false, error: error.response.data.message });
+      reject({ status: false, message: error.response.data.message });
     }
   });
 }
 
 
-export async function RegisterUser (payload) {
-    const api = useApi();
-    const response = await api.post('/api/auth/register', payload)
-    if(response){
-        localStorage.setItem('token', JSON.stringify(response.access_token));
-        return true;
-    }else{
-        return false 
-    }
+export  function RegisterUser (payload) {
+  const api = useApi();
+  return new Promise(async (resolve,reject)=> { 
+    try { 
+    const response =   await api.post('/api/auth/register', payload);
+    const status = response.data.status;
+    if (status) localStorage.setItem('token', JSON.stringify(response.data.access_token));
+    resolve({ status: status });
+  } catch (error) {
+    console.log(error.res);
+    reject({ status: false, message: error.response.data.message });
+  }
+  })
 }
 export async function CheckAuthentication  ()  {
     const api = useApi();

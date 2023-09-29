@@ -27,6 +27,13 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto) {
     try {
+      const existingUser = await this.userService.findOneByEmail(
+        createUserDto.email,
+      );
+
+      if (existingUser) {
+        throw new UnauthorizedException('Email already in use');
+      }
       const user = await this.userService.createUser(createUserDto);
       const payload = { sub: user._id, username: user.username };
       const token = this.jwtService.sign(payload);
