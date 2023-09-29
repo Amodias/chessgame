@@ -1,19 +1,19 @@
 import { useApi } from "../../composable/api"
 
 
-export async function LoginUser (payload) {
-    console.log(payload);
-    const api = useApi();
-    const response = await api.post('/api/auth/login', payload)
-    if(response){
-        localStorage.setItem('token', JSON.stringify(response.data.access_token));
-        // const token = JSON.parse(localStorage.getItem('token'));
-        
-
-        return true;
-    }else{
-        return false 
+export function LoginUser(payload) {
+  const api = useApi();
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.post('/api/auth/login', payload);
+      const status = response.data.status;
+      if (status) localStorage.setItem('token', JSON.stringify(response.data.access_token));
+      resolve({ status: status });
+    } catch (error) {
+      console.log(error.response.data.message);
+      reject({ status: false, error: error.response.data.message });
     }
+  });
 }
 
 

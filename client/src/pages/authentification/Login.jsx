@@ -8,6 +8,7 @@ import { LoginUser } from '../../services/auth';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [validationError , setValidationError] = useState('')
   const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
@@ -20,9 +21,14 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const response = LoginUser({username, password}); 
-    response ?  navigate('/') :  navigate('/login');
-    // console.log(response);
+    LoginUser({username, password})
+    .then((result) => {
+      if(result.status) navigate('/') ;
+    })
+    .catch((error) => {
+      setValidationError(error.error)
+    });
+    
   };
 
   return (
@@ -52,6 +58,12 @@ const Login = () => {
                 <a class="form-pwd-reset" href="">Forgot password ?</a>
                 
             </div>
+            {validationError && (
+              <div>
+                <p>{validationError}</p>
+              </div>
+                )
+            }
             <button onClick={handleSubmit} type="submit" className="btn btn-primary">Login</button>
             <div>
             <Link to="/register" className="link-create-account">
