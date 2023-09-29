@@ -1,27 +1,32 @@
 import { useApi } from "../../composable/api"
 
 
-export async function LoginUser (payload) {
-    const api = useApi();
-    const response = await api.post('/api/auth/login', payload)
-    if(response){
-        localStorage.setItem('token', JSON.stringify(response.data.access_token));
-        return true;
-    }else{
-        return false 
+export function LoginUser(payload) {
+  const api = useApi();
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await api.post('/api/auth/login', payload);
+      localStorage.setItem('token', JSON.stringify(response.data.access_token));
+      resolve({ status: true });
+    } catch (error) {
+      reject({ status: false, message: error.response.data.message });
     }
+  });
 }
 
 
-export async function RegisterUser (payload) {
-    const api = useApi();
-    const response = await api.post('/api/auth/register', payload)
-    if(response){
-        localStorage.setItem('token', JSON.stringify(response.access_token));
-        return true;
-    }else{
-        return false 
-    }
+export  function RegisterUser (payload) {
+  const api = useApi();
+  return new Promise(async (resolve,reject)=> { 
+    try { 
+    const response =   await api.post('/api/auth/register', payload);
+    localStorage.setItem('token', JSON.stringify(response.data.access_token));
+    resolve({ status: true });
+  } catch (error) {
+    console.log(error.res);
+    reject({ status: false, message: error.response.data.message });
+  }
+  })
 }
 export async function CheckAuthentication  ()  {
     const api = useApi();

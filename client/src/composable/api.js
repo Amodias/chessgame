@@ -14,7 +14,7 @@ export function createApi() {
 
   api.interceptors.request.use((config) => {
     
-    const token = JSON.parse(localStorage.getItem('token'));
+    const token  = localStorage.getItem('token')  ?  JSON.parse(localStorage.getItem('token')) : null;
     if (token) {
       config.headers = {
         ...config.headers,
