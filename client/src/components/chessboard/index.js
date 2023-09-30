@@ -95,12 +95,12 @@ const ChessBoard = ({}) => {
           const PawnComponent = pawnComponent ? pawnComponent.component : null;
           const piece = chess.get(position);
           const handleSquareClick = () => {
-            if (selectedPosition === position) {
+            if (selectedPosition === position && piece.color === "w") {
               setSelectedPosition(null);
               setPossibleMoves([]);
             } else if (selectedPosition && possibleMoves.includes(position)) {
               handleMove(position);
-            } else {
+            } else if (piece.color === "w") {
               setSelectedPosition(position);
               setPossibleMoves(getPossibleMoves(chess, position));
             }
@@ -117,9 +117,7 @@ const ChessBoard = ({}) => {
                 opacity: possibleMoves.includes(position) ? 0.5 : 1,
                 cursor: selectedPosition ? "pointer" : "default",
               }}
-              onClick={
-                pawnComponent?.color === "white" ? handleSquareClick : null
-              }
+              onClick={handleSquareClick}
             >
               {PawnComponent && (
                 <PawnComponent
