@@ -28,11 +28,6 @@ const ChessBoard = ({}) => {
     updatedPawnComponents[to] = pawnComponent;
     setPawnComponents(updatedPawnComponents);
   };
-
-  useEffect(() => {
-    movePawnComponent(receivedPosition.from, receivedPosition.to);
-  }, [chess]);
-
   useEffect(() => {
     const handlePawnMove = (chessState, selectedPosition, to) => {
       setReceivedPosition({ from: selectedPosition, to: to });
@@ -50,7 +45,6 @@ const ChessBoard = ({}) => {
       columns.forEach((column, columnIndex) => {
         let position = `${column}${row}`;
         const piece = chess.get(position);
-        console.log(piece.color);
         const component = () => {
           if (piece.type === "r") return Rook;
           if (piece.type === "k") return King;
@@ -72,7 +66,7 @@ const ChessBoard = ({}) => {
         }));
       })
     );
-  }, []);
+  }, [chess]);
 
   const renderChessboard = () => {
     const rows = ["8", "7", "6", "5", "4", "3", "2", "1"];
@@ -83,7 +77,11 @@ const ChessBoard = ({}) => {
         movePawnComponent(selectedPosition, to);
         const { chessState } = movePawn(chess, selectedPosition, to);
         setChess(chessState);
-        socketService.emitPawnMove(chess.fen(), selectedPosition, to);
+        socketService.emitPawnMove(
+          mirrorFEN(chess.fen()),
+          selectedPosition,
+          to
+        );
         setSelectedPosition(null);
         setPossibleMoves([]);
       }
@@ -95,9 +93,7 @@ const ChessBoard = ({}) => {
           let position = `${column}${row}`;
           const pawnComponent = pawnComponents[position];
           const PawnComponent = pawnComponent ? pawnComponent.component : null;
-          const color = pawnComponent ? pawnComponent.color : null;
           const piece = chess.get(position);
-          console.log(piece);
           const handleSquareClick = () => {
             if (selectedPosition === position) {
               setSelectedPosition(null);
@@ -121,21 +117,16 @@ const ChessBoard = ({}) => {
                 opacity: possibleMoves.includes(position) ? 0.5 : 1,
                 cursor: selectedPosition ? "pointer" : "default",
               }}
-              onClick={handleSquareClick}
+              onClick={
+                pawnComponent?.color === "white" ? handleSquareClick : null
+              }
             >
-              {/* {piece ? (
-                <PawnComponent
-                  type={JSON.stringify(piece.type)}
-                  color={color}
-                />
-              ) : null} */}
               {PawnComponent && (
                 <PawnComponent
                   type={pawnComponent.type}
                   color={pawnComponent.color}
                 />
               )}
-              {/* {piece && <PawnComponent type={piece.type} color={piece.color} />} */}
             </ChessboardSquare>
           );
         })}

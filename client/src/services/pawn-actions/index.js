@@ -22,11 +22,9 @@ const convertNotationToPosition = (notation) => {
 };
 
 export const mirrorFEN = (fen) => {
-  // Split the FEN string into its components
   const [board, turn, castling, enPassant, halfMoveClock, fullMoveNumber] =
     fen.split(" ");
 
-  // Create a mapping of piece characters for mirroring
   const pieceMap = {
     P: "p",
     N: "n",
@@ -42,7 +40,6 @@ export const mirrorFEN = (fen) => {
     k: "K",
   };
 
-  // Mirror the board
   const mirroredBoard = board
     .split("/")
     .map((row) =>
@@ -54,7 +51,6 @@ export const mirrorFEN = (fen) => {
     .reverse()
     .join("/");
 
-  // Create the mirrored FEN string
   const mirroredFEN = `${mirroredBoard} ${
     turn === "w" ? "b" : "w"
   } ${castling} ${enPassant} ${halfMoveClock} ${fullMoveNumber}`;
