@@ -12,26 +12,45 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  pairedSockets: Set<Socket> = new Set();
+  connectedSockets: Set<Socket> = new Set();
+  pairedSockets: Socket[][] = [];
   constructor() {
     setInterval(this.checkRoomsAndEmitEvents.bind(this), 500);
   }
 
   handleConnection(client: Socket) {
-    if (!this.pairedSockets.has(client)) {
-      this.pairedSockets.add(client);
+    if (!this.connectedSockets.has(client)) {
+      this.connectedSockets.add(client);
     }
     Socket;
   }
 
   private checkRoomsAndEmitEvents() {
-    if (this.pairedSockets.size >= 2) {
-      const pair = Array.from(this.pairedSockets);
-      const roomId = pair.map((socket) => socket.id).join('-');
-      pair.forEach((socket) => {
-        socket.join(roomId);
-        socket.emit('MultiPlayerRoomCreated', roomId);
+    let currentSocket = [];
+    if (this.connectedSockets.size >= 2) {
+      const socketsList = Array.from(this.connectedSockets);
+      socketsList.forEach((socket) => {
+        currentSocket.push(socket);
+        const paired = this.pairedSockets.some((pair) => pair.includes(socket));
+        if (!paired && currentSocket.length === 2) {
+          this.pairedSockets.push(currentSocket);
+          currentSocket = [];
+        }
       });
+      this.pairedSockets.forEach((pairedSocket) => {
+        const roomId = pairedSocket.map((socket) => socket.id).join('-');
+        pairedSocket.forEach((socket) => {
+          socket.join(roomId);
+          socket.emit('MultiPlayerRoomCreated', roomId);
+        });
+      });
+      // const roomId = socketsList.map((socket) => socket.id).join('-');
+      // socketsList.forEach((socket) => {
+      //   console.log('the ugly', roomId);
+
+      //   socket.join(roomId);
+      //   socket.emit('MultiPlayerRoomCreated', roomId);
+      // });
     }
   }
 
@@ -43,6 +62,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: Socket) {
-    this.pairedSockets.delete(client);
+    this.connectedSockets.delete(client);
   }
 }
