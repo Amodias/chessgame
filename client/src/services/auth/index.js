@@ -34,7 +34,6 @@ export async function CheckAuthentication  ()  {
       const response = await api.get('/api/auth/verify-token');
       return response.data.isValid;
     } catch (error) {
-      console.error('Error while checking authentication:', error);
       return false;
     }
   };
