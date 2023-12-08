@@ -7,19 +7,16 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-    _id: any;
+  _id: any;
 
   @Prop({ required: true, unique: true })
   username: string;
 
-  @Prop({ required: true, unique: true }) // Set unique to ensure no duplicate email addresses
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ required: true })
-  password: string; // Add a field to store the hashed password
-
-  // Add any other properties you want for your user model
-
+  password: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
