@@ -26,7 +26,6 @@ const ChessBoard = ({
 }) => {
   const [chess, setChess] = useState(new Chess());
 
-  const [receivedPosition, setReceivedPosition] = useState({});
   const [pawnComponents, setPawnComponents] = useState(initilaeState);
 
   const movePawnComponent = (from, to) => {
@@ -40,7 +39,6 @@ const ChessBoard = ({
   useEffect(() => {
     if (multiplayer) {
       const handlePawnMove = (chessState, selectedPosition, to) => {
-        setReceivedPosition({ from: selectedPosition, to: to });
         setChess(new Chess(chessState));
       };
       socketService.onPawnMove(handlePawnMove);
@@ -107,7 +105,9 @@ const ChessBoard = ({
 
         setSelectedPosition(null);
         setPossibleMoves([]);
-        stockfishMove(chess.fen());
+        if (iaMode) {
+          stockfishMove(chess.fen());
+        }
       }
     };
 
