@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../../styles/Board.css";
 import SpaceBackground from "../../../components/particels";
 import Sidebar from "../../../components/sidebar";
-import socketService from "../../../services/socketServices";
+import socketService from "../../../services/sockets/socketServices";
 import LoadingComponent from "../../../components/loading/settingroom";
 import MultiPlayerChessBoard from "./multi-player-chess-board";
 

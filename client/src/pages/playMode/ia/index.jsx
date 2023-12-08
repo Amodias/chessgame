@@ -1,19 +1,16 @@
-import React , {useState } from "react";
-import '../../styles/Board.css';
-import ChessBoard from "../../components/chessBoard";
-import SpaceBackground from '../../components/particels';
-import Sidebar from '../../components/sidebar';
-import { Chess } from "chess.js";
-import {
-  movePawn,
-  getPossibleMoves,
-  mirrorFEN,
-} from "../../services/pawn-actions";
+import React , {useState ,useEffect } from "react";
+import '../../../styles/Board.css';
+import ChessBoard from "../../../components/chessBoard";
+import SpaceBackground from '../../../components/particels';
+import Sidebar from '../../../components/sidebar';
 
-export default function Single() {
+
+export default function Ia() {
 
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [possibleMoves, setPossibleMoves] = useState([]);
+
+
 
   return (
     <div className="board-wrapper">
@@ -28,7 +25,8 @@ export default function Single() {
         setSelectedPosition={setSelectedPosition}
         possibleMoves={possibleMoves}
         setPossibleMoves={setPossibleMoves}
-        multiplayer={false} />;
+        multiplayer={false}
+        iaMode={true} />;
       </div>
     </div>
   );

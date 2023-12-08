@@ -7,20 +7,27 @@ import {
   getPossibleMoves,
   mirrorFEN,
 } from "../../services/pawn-actions";
-import socketService from "../../services/socketServices";
+import socketService from "../../services/sockets/socketServices";
 import Pawn from "../pawns/pawn";
 import Knight from "../pawns/knight";
 import Bishop from "../pawns/bishop";
 import King from "../pawns/king";
 import Queen from "../pawns/queen";
 import Rook from "../pawns/rook";
+import { getStockfishFen } from "../../services/stockfish-ia";
 
-const ChessBoard = ({}) => {
+const ChessBoard = ({
+  selectedPosition,
+  setSelectedPosition,
+  possibleMoves,
+  setPossibleMoves,
+  multiplayer,
+  iaMode,
+}) => {
   const [chess, setChess] = useState(new Chess());
-  const [selectedPosition, setSelectedPosition] = useState(null);
-  const [receivedPosition, setReceivedPosition] = useState({});
-  const [possibleMoves, setPossibleMoves] = useState([]);
+
   const [pawnComponents, setPawnComponents] = useState(initilaeState);
+
   const movePawnComponent = (from, to) => {
     const updatedPawnComponents = { ...pawnComponents };
     const pawnComponent = updatedPawnComponents[from];
@@ -28,18 +35,30 @@ const ChessBoard = ({}) => {
     updatedPawnComponents[to] = pawnComponent;
     setPawnComponents(updatedPawnComponents);
   };
+
   useEffect(() => {
-    const handlePawnMove = (chessState, selectedPosition, to) => {
-      setReceivedPosition({ from: selectedPosition, to: to });
-      setChess(new Chess(chessState));
-    };
-    socketService.onPawnMove(handlePawnMove);
-    return () => {
-      socketService.offPawnMove();
-    };
+    if (multiplayer) {
+      const handlePawnMove = (chessState, selectedPosition, to) => {
+        setChess(new Chess(chessState));
+      };
+      socketService.onPawnMove(handlePawnMove);
+      return () => {
+        socketService.offPawnMove();
+      };
+    }
   }, []);
+
   const rows = ["8", "7", "6", "5", "4", "3", "2", "1"];
   const columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+  const stockfishMove = () => {
+    getStockfishFen(chess.fen()).then((bestMove) => {
+      const result = movePawn(chess, bestMove.from, bestMove.to);
+      const newChessState = result.chessState;
+      setChess(new Chess(newChessState.fen()));
+    });
+  };
+
   useEffect(() => {
     rows.forEach((row, rowIndex) =>
       columns.forEach((column, columnIndex) => {
@@ -72,18 +91,23 @@ const ChessBoard = ({}) => {
     const rows = ["8", "7", "6", "5", "4", "3", "2", "1"];
     const columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-    const handleMove = (to) => {
+    const handleMove = (to, multiplayer) => {
       if (selectedPosition && possibleMoves.includes(to)) {
         movePawnComponent(selectedPosition, to);
         const { chessState } = movePawn(chess, selectedPosition, to);
         setChess(chessState);
-        socketService.emitPawnMove(
-          mirrorFEN(chess.fen()),
-          selectedPosition,
-          to
-        );
+        multiplayer ??
+          socketService.emitPawnMove(
+            mirrorFEN(chess.fen()),
+            selectedPosition,
+            to
+          );
+
         setSelectedPosition(null);
         setPossibleMoves([]);
+        if (iaMode) {
+          stockfishMove(chess.fen());
+        }
       }
     };
 
@@ -95,12 +119,17 @@ const ChessBoard = ({}) => {
           const PawnComponent = pawnComponent ? pawnComponent.component : null;
           const piece = chess.get(position);
           const handleSquareClick = () => {
-            if (selectedPosition === position && piece.color === "w") {
+            if (
+              (selectedPosition === position &&
+                piece.color === "w" &&
+                multiplayer) ||
+              (!multiplayer && selectedPosition === position)
+            ) {
               setSelectedPosition(null);
               setPossibleMoves([]);
             } else if (selectedPosition && possibleMoves.includes(position)) {
               handleMove(position);
-            } else if (piece.color === "w") {
+            } else if ((piece.color === "w" && multiplayer) || !multiplayer) {
               setSelectedPosition(position);
               setPossibleMoves(getPossibleMoves(chess, position));
             }

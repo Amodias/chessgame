@@ -1,22 +1,21 @@
-import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { CheckAuthentication } from '../../services/auth';
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { CheckAuthentication } from "../../services/auth";
 
 const ProtectedRoute = ({ element: Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); 
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchAuthentication() {
       const isAuthenticated = await CheckAuthentication();
       setIsAuthenticated(isAuthenticated);
-      setIsLoading(false); 
+      setIsLoading(false);
     }
     fetchAuthentication();
   }, []);
 
   if (isLoading) {
-    
     return <div>Loading...</div>;
   }
 
