@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/App.css";
 import Single from "./pages/playMode/single";
-import Ia from "./pages/playMode/ia";
+import Ia from "./pages/playMode/ia/index.jsx";
 import MultiPlayer from "./pages/playMode/multi-player/index.jsx";
 import Login from "./pages/authentification/Login";
 import Register from "./pages/authentification/Register";

@@ -14,6 +14,7 @@ import Bishop from "../pawns/bishop";
 import King from "../pawns/king";
 import Queen from "../pawns/queen";
 import Rook from "../pawns/rook";
+import { getStockfishFen } from "../../services/stockfish-ia";
 
 const ChessBoard = ({
   selectedPosition,
@@ -21,6 +22,7 @@ const ChessBoard = ({
   possibleMoves,
   setPossibleMoves,
   multiplayer,
+  iaMode,
 }) => {
   const [chess, setChess] = useState(new Chess());
 
@@ -50,6 +52,14 @@ const ChessBoard = ({
 
   const rows = ["8", "7", "6", "5", "4", "3", "2", "1"];
   const columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+  const stockfishMove = () => {
+    getStockfishFen(chess.fen()).then((bestMove) => {
+      const result = movePawn(chess, bestMove.from, bestMove.to);
+      const newChessState = result.chessState;
+      setChess(new Chess(newChessState.fen()));
+    });
+  };
 
   useEffect(() => {
     rows.forEach((row, rowIndex) =>
@@ -94,8 +104,10 @@ const ChessBoard = ({
             selectedPosition,
             to
           );
+
         setSelectedPosition(null);
         setPossibleMoves([]);
+        stockfishMove(chess.fen());
       }
     };
 
