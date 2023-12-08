@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../styles/Board.css';
-import ChessBoard from "../../components/chessboard";
+import ChessBoard from "../../components/chessBoard";
 import SpaceBackground from '../../components/particels';
 import Sidebar from '../../components/sidebar';
 
