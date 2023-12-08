@@ -44,13 +44,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
           socket.emit('MultiPlayerRoomCreated', roomId);
         });
       });
-      // const roomId = socketsList.map((socket) => socket.id).join('-');
-      // socketsList.forEach((socket) => {
-      //   console.log('the ugly', roomId);
-
-      //   socket.join(roomId);
-      //   socket.emit('MultiPlayerRoomCreated', roomId);
-      // });
     }
   }
 

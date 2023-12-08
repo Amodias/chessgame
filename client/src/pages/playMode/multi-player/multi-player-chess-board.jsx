@@ -1,12 +1,6 @@
-import React , {useState , useEffect} from "react";
+import React , {useState } from "react";
 import ChessBoard from "../../../components/chessBoard";
-import { Chess } from "chess.js";
-import {
-  movePawn,
-  getPossibleMoves,
-  mirrorFEN,
-} from "../../../services/pawn-actions";
-import socketService from "../../../services/sockets/socketServices"
+
 
 const MultiPlayerChessBoard = () => {
 

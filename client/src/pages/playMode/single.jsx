@@ -3,12 +3,6 @@ import '../../styles/Board.css';
 import ChessBoard from "../../components/chessBoard";
 import SpaceBackground from '../../components/particels';
 import Sidebar from '../../components/sidebar';
-import { Chess } from "chess.js";
-import {
-  movePawn,
-  getPossibleMoves,
-  mirrorFEN,
-} from "../../services/pawn-actions";
 
 export default function Single() {
 

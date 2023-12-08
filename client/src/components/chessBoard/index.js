@@ -38,7 +38,7 @@ const ChessBoard = ({
 
   useEffect(() => {
     if (multiplayer) {
-      const handlePawnMove = (chessState, selectedPosition, to) => {
+      const handlePawnMove = (chessState) => {
         setChess(new Chess(chessState));
       };
       socketService.onPawnMove(handlePawnMove);
@@ -60,8 +60,8 @@ const ChessBoard = ({
   };
 
   useEffect(() => {
-    rows.forEach((row, rowIndex) =>
-      columns.forEach((column, columnIndex) => {
+    rows.forEach((row) =>
+      columns.forEach((column) => {
         let position = `${column}${row}`;
         const piece = chess.get(position);
         const component = () => {

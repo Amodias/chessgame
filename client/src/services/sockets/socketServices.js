@@ -1,8 +1,8 @@
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 const socketService = {
-  socket: io('http://127.0.0.1:8000', {
-    transports: ['websocket']
+  socket: io("http://127.0.0.1:8000", {
+    transports: ["websocket"],
   }),
 
   connect() {
@@ -14,8 +14,8 @@ const socketService = {
   },
   checkRoom() {
     return new Promise((resolve) => {
-      this.socket.on('MultiPlayerRoomCreated', (roomId) => {
-        this.socket.room = roomId ;
+      this.socket.on("MultiPlayerRoomCreated", (roomId) => {
+        this.socket.room = roomId;
         resolve(true);
       });
     });
@@ -23,19 +23,22 @@ const socketService = {
   isConnected() {
     return this.socket.connected;
   },
-  emitPawnMove(chessState , selectedPosition ,to){
-      this.socket.emit("emit-pawn-move" , {roomId : this.socket.room , chessState : chessState ,selectedPosition : selectedPosition , to : to })
-  },
-  onPawnMove(callback) {
-    this.socket.on('on-pawn-move', ({chessState  ,selectedPosition, to}) => {
-
-      console.log(chessState,  selectedPosition, to);
-      callback(chessState,  selectedPosition, to);
+  emitPawnMove(chessState, selectedPosition, to) {
+    this.socket.emit("emit-pawn-move", {
+      roomId: this.socket.room,
+      chessState: chessState,
+      selectedPosition: selectedPosition,
+      to: to,
     });
   },
-  offPawnMove(){
-   return  this.socket.off('on-pawn-move') ;
-  }
+  onPawnMove(callback) {
+    this.socket.on("on-pawn-move", ({ chessState, selectedPosition, to }) => {
+      callback(chessState, selectedPosition, to);
+    });
+  },
+  offPawnMove() {
+    return this.socket.off("on-pawn-move");
+  },
 };
 
 export default socketService;

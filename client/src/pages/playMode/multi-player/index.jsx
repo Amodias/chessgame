@@ -6,12 +6,10 @@ import socketService from "../../../services/sockets/socketServices";
 import LoadingComponent from "../../../components/loading/settingroom";
 import MultiPlayerChessBoard from "./multi-player-chess-board";
 
-import { useNavigate } from "react-router-dom";
 
 const MultiPlayer = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [failed, setFailed] = useState(false);
-  const navigate = useNavigate();
   const isConnected = socketService.isConnected();
   if (!isConnected) {
     socketService.connect();
