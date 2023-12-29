@@ -19,7 +19,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div>
+    <div className="sidebar-container">
       <div
         className={`sidebar ${
           isExpanded ? "expanded" : ""

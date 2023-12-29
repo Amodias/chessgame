@@ -3,6 +3,7 @@
   position: fixed;
   z-index: 5;
   transition: width 0.3s ease;
+  
 }
 .sidebar-header{
 top:0%;
@@ -12,6 +13,7 @@ border-radius: 50%;
 .sidebar-content{
   margin-top: 10%;
   padding-block: 5%;
+  
 
 }
 
@@ -47,4 +49,13 @@ border-radius: 50%;
 
 span{
   color: white;
+}
+
+
+@media screen and (max-width: 768px) {
+  .sidebar-container {
+    display: flex;
+    flex-direction: column;
+  }
+
 }
