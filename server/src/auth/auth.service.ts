@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException , HttpException , HttpStatus} from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -7,7 +12,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async signIn(username, pass) {
@@ -16,15 +21,22 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     const payload = { sub: user._id, username: user.username };
-    const token =  await this.jwtService.signAsync(payload) ;
-    return { user, access_token: token };
+    const token = await this.jwtService.signAsync(payload);
+    return { status: true, user, access_token: token };
   }
 
   async signUp(createUserDto: CreateUserDto) {
     try {
+      const existingUser = await this.userService.findOneByEmail(
+        createUserDto.email,
+      );
+
+      if (existingUser) {
+        throw new UnauthorizedException('Email already in use');
+      }
       const user = await this.userService.createUser(createUserDto);
       const payload = { sub: user._id, username: user.username };
-      const token = this.jwtService.sign(payload); 
+      const token = this.jwtService.sign(payload);
       return { user, access_token: token };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -33,13 +45,11 @@ export class AuthService {
 
   async verifyToken(token) {
     try {
-
-      const decoded = this.jwtService.verify(  token); 
-      const { sub: userId,  username } = decoded;
-      return { isValid: true,  username };
+      const decoded = this.jwtService.verify(token);
+      const { sub: userId, username } = decoded;
+      return { isValid: true, username };
     } catch (error) {
-      return { isValid: false, token : token , error: error.message };
+      return { isValid: false, token: token, error: error.message };
     }
   }
-
 }

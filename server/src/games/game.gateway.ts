@@ -1,4 +1,10 @@
-import { WebSocketGateway, SubscribeMessage, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  WebSocketServer,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway()
@@ -6,30 +12,49 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  pairedSockets: Set<Socket> = new Set(); // Keep track of paired sockets
+  connectedSockets: Set<Socket> = new Set();
+  pairedSockets: Socket[][] = [];
+  constructor() {
+    setInterval(this.checkRoomsAndEmitEvents.bind(this), 500);
+  }
 
   handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+    if (!this.connectedSockets.has(client)) {
+      this.connectedSockets.add(client);
+    }
+    Socket;
+  }
 
-    if (!this.pairedSockets.has(client)) {
-      this.pairedSockets.add(client);
-
-      if (this.pairedSockets.size >= 2) {
-        const pair = Array.from(this.pairedSockets);
-        this.pairedSockets.clear();
-
-        const roomId = pair.map(socket => socket.id).join('-');
-        pair.forEach(socket => {
+  private checkRoomsAndEmitEvents() {
+    let currentSocket = [];
+    if (this.connectedSockets.size >= 2) {
+      const socketsList = Array.from(this.connectedSockets);
+      socketsList.forEach((socket) => {
+        currentSocket.push(socket);
+        const paired = this.pairedSockets.some((pair) => pair.includes(socket));
+        if (!paired && currentSocket.length === 2) {
+          this.pairedSockets.push(currentSocket);
+          currentSocket = [];
+        }
+      });
+      this.pairedSockets.forEach((pairedSocket) => {
+        const roomId = pairedSocket.map((socket) => socket.id).join('-');
+        pairedSocket.forEach((socket) => {
           socket.join(roomId);
-          console.log(roomId);
-          socket.emit('GameSetted', { roomId });
+          socket.emit('MultiPlayerRoomCreated', roomId);
         });
-      }
+      });
     }
   }
 
+  @SubscribeMessage('emit-pawn-move')
+  handlePawnMove(client: Socket, { roomId, chessState, selectedPosition, to }) {
+    client
+      .to(roomId)
+      .emit('on-pawn-move', { chessState, selectedPosition, to });
+  }
+
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
-    this.pairedSockets.delete(client);
+    this.connectedSockets.delete(client);
   }
 }

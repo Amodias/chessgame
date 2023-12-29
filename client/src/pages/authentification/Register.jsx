@@ -3,12 +3,16 @@ import '../../styles/Authentification.css'; // CSS file for styling
 import SpaceBackground from '../../components/particels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faUser, faChess } from '@fortawesome/free-solid-svg-icons';
+import { RegisterUser } from '../../services/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('s');
+  const [email, setEmail] = useState('s@s.s');
+  const [password, setPassword] = useState('123');
+  const [confirmPassword, setConfirmPassword] = useState('123');
+  const [validationError , setValidationError] = useState('')
+  const navigate = useNavigate();
   
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -28,8 +32,14 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Perform registration logic
-    // You can use the username, email, and password state values here
+    const payload =  { username  , email, password} ;
+    RegisterUser(payload)
+    .then((result) => {
+      if(result.status) navigate('/') ;
+    })
+    .catch((error) => {
+      setValidationError(error.message)
+    });
   };
 
   return (
@@ -87,6 +97,12 @@ const Register = () => {
             />
             <FontAwesomeIcon icon={faLock} className="icon" />
           </div>
+          {validationError && (
+              <div className='my-2'>
+                <p>{validationError}</p>
+              </div>
+                )
+            }
           <button type="submit" className="btn btn-primary">Register</button>
         </form>
       </div>
